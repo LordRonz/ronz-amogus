@@ -5,6 +5,7 @@ from discord.ext import commands
 from read_env import read_env
 from random import choice
 from keep_alive import keep_alive
+from add_reaction import flushed
 
 read_env()
 
@@ -38,21 +39,25 @@ async def on_ready():
 @bot.command(name='amogus', help='When the impostor is sus 😳')
 @commands.cooldown(1, 3, commands.BucketType.user)
 async def amogus(ctx):
+    await flushed(ctx.message)
     await ctx.send(choice(amoguses))
 
 @bot.command(name='swear', help='Fuck')
 @commands.cooldown(1, 3, commands.BucketType.user)
 async def swear(ctx):
+    await flushed(ctx.message)
     await ctx.send(choice(profanities))
 
 @bot.command(name='gooba', help='Gooba Lyrics')
 @commands.cooldown(1, 3, commands.BucketType.user)
 async def gooba(ctx):
+    await flushed(ctx.message)
     await ctx.send(gooba_lyrics)
 
 @bot.command(name='cock', help='Nice COCK')
 @commands.cooldown(1, 3, commands.BucketType.user)
 async def cock(ctx):
+    await flushed(ctx.message)
     await ctx.send(nice_cock)
 
 @bot.listen('on_message')
@@ -60,6 +65,7 @@ async def sus(message):
     if message.author == bot.user or message.author.bot:
         return
     if 'sus' in message.content.lower():
+        await flushed(message)
         await message.channel.send('**A M O G U S**')
 
 keep_alive()
