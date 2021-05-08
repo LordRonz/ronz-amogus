@@ -6,6 +6,7 @@ from read_env import read_env
 from random import choice
 from keep_alive import keep_alive
 from add_reaction import flushed
+from meme_handler import get_meme
 
 read_env()
 
@@ -59,6 +60,13 @@ async def gooba(ctx):
 async def cock(ctx):
     await flushed(ctx.message)
     await ctx.send(nice_cock)
+
+@bot.command(name='meme', help='Yes, memes')
+@commands.cooldown(1, 3, commands.BucketType.guild)
+async def meme(ctx):
+    await flushed(ctx.message)
+    url = await get_meme()
+    await ctx.send(url)
 
 @bot.listen('on_message')
 async def sus(message):
