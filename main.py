@@ -39,25 +39,25 @@ async def on_ready():
     print(f'{bot.user} has connected to Discord!')
 
 @bot.command(name='amogus', help='When the impostor is sus 😳')
-@commands.cooldown(1, 3, commands.BucketType.user)
+@commands.cooldown(1, 3, commands.BucketType.guild)
 async def amogus(ctx):
     await flushed(ctx.message)
     await ctx.send(choice(amoguses))
 
 @bot.command(name='swear', help='Fuck')
-@commands.cooldown(1, 3, commands.BucketType.user)
+@commands.cooldown(1, 3, commands.BucketType.guild)
 async def swear(ctx):
     await flushed(ctx.message)
     await ctx.send(choice(profanities))
 
 @bot.command(name='gooba', help='Gooba Lyrics')
-@commands.cooldown(1, 3, commands.BucketType.user)
+@commands.cooldown(1, 3, commands.BucketType.guild)
 async def gooba(ctx):
     await flushed(ctx.message)
     await ctx.send(gooba_lyrics)
 
 @bot.command(name='cock', help='Nice COCK')
-@commands.cooldown(1, 3, commands.BucketType.user)
+@commands.cooldown(1, 3, commands.BucketType.guild)
 async def cock(ctx):
     await flushed(ctx.message)
     await ctx.send(nice_cock)
@@ -66,8 +66,10 @@ async def cock(ctx):
 @commands.cooldown(1, 3, commands.BucketType.guild)
 async def meme(ctx):
     await flushed(ctx.message)
-    url = await get_meme()
-    await ctx.send(url)
+    title, permalink, url = await get_meme()
+    embed = discord.Embed(title=title, url=permalink, color=0xff0000)
+    embed.set_image(url=url)
+    await ctx.send(embed=embed)
 
 @bot.event
 async def on_reaction_add(reaction, user):
@@ -75,22 +77,28 @@ async def on_reaction_add(reaction, user):
         return
     if reaction.message.author != bot.user:
         return
-    message = reaction.message
-    if not message.content.split('\n')[1].startswith('https://i.nhentai.net'):
-        return
     if reaction.emoji != '➡️' and reaction.emoji != '⬅️':
         return
-    old_content = message.content.split('\n')
-    new_content = check_valid_hentai(old_content[1], reaction.emoji=='➡️')
-    if new_content:
-        await message.edit(content=f'{old_content[0]}\n{new_content}')
+    message = reaction.message
+    if not message.embeds:
+        return
+    embed = message.embeds[0]
+    if not embed.url.startswith('https://nhentai.net/g'):
+        return
+    new_embed = check_valid_hentai(embed, reaction.emoji=='➡️')
+    if new_embed:
+        await message.edit(embed=new_embed)
 
 @bot.command(name='hentai', help='Warning: NSFW')
-@commands.cooldown(1, 3, commands.BucketType.guild)
-async def hentai(ctx):
+@commands.cooldown(1, 30, commands.BucketType.guild)
+async def hentai(ctx, id=None):
     await flushed(ctx.message)
-    _id, url = random_hentai()
-    message = await ctx.send(f'https://nhentai.net/g/{_id}\n{url}')
+    if id and not id.isnumeric():
+        id = None
+    title, url, img_url = random_hentai(int(id) if id else None)
+    embed = discord.Embed(title=title, url=url, color=0xff0000)
+    embed.set_image(url=img_url)
+    message = await ctx.send(embed=embed)
     await message.add_reaction('⬅️')
     await message.add_reaction('➡️')
 

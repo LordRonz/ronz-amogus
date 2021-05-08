@@ -13,10 +13,12 @@ async def get_meme():
 
     json = res.json()['data']['children']
     length = len(json) - 1
-    print(length)
-
+    index = 0
     while not isValidImg(url):
         index = randint(0, length)
         url = json[index]['data']['url']
 
-    return url
+    permalink = f"https://reddit.com{json[index]['data']['permalink']}"
+    title = json[index]['data']['title']
+
+    return title, permalink, url
