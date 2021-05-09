@@ -85,7 +85,7 @@ async def on_reaction_add(reaction, user):
     embed = message.embeds[0]
     if not embed.url.startswith('https://nhentai.net/g'):
         return
-    new_embed = check_valid_hentai(embed, reaction.emoji=='➡️')
+    new_embed = await check_valid_hentai(embed, reaction.emoji=='➡️')
     if new_embed:
         await message.edit(embed=new_embed)
 
@@ -95,7 +95,7 @@ async def hentai(ctx, id=None):
     await flushed(ctx.message)
     if id and not id.isnumeric():
         id = None
-    title, url, img_url = random_hentai(int(id) if id else None)
+    title, url, img_url = await random_hentai(int(id) if id else None)
     embed = discord.Embed(title=title, url=url, color=0xff0000)
     embed.set_image(url=img_url)
     message = await ctx.send(embed=embed)

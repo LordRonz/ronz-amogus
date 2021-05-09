@@ -1,4 +1,4 @@
-import requests
+import aiohttp
 from random import randint, choice
 
 SUBREDDITS = ['dankmemes', 'memes']
@@ -7,11 +7,15 @@ def isValidImg(url):
     return url.startswith('https://i.') and (url.endswith('.jpg') or url.endswith('.gif') or url.endswith('.png') or url.endswith('.gifv'))
 
 async def get_meme():
-    res = requests.get(f'https://www.reddit.com/r/{choice(SUBREDDITS)}/top/.json?sort=top&t=day&showmedia=true&mediaonly=true&is_self=true&limit=69', headers={'User-agent': 'ronz-amogus'})
+
+    async with aiohttp.ClientSession() as session:
+        target_url = f'https://www.reddit.com/r/{choice(SUBREDDITS)}/top/.json?sort=top&t=day&showmedia=true&mediaonly=true&is_self=true&limit=69'
+        async with session.get(target_url, headers={'User-agent': 'ronz-amogus'}) as res:
+            json = await res.json()
 
     url = ''
 
-    json = res.json()['data']['children']
+    json = json['data']['children']
     length = len(json) - 1
     index = 0
     while not isValidImg(url):
