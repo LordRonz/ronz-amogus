@@ -20,8 +20,11 @@ for i in range(AMOGUS_COUNT):
     with open(f'./amoguses/amogus{i}.txt', 'r') as f:
         amoguses.append(f.read())
 
-with open(f'./nice_cock.txt', 'r') as f:
+with open(f'./random_txt/nice_cock.txt', 'r') as f:
     nice_cock = f.read()
+
+with open(f'./random_txt/zukowei.txt', 'r') as f:
+    zukowei = f.read()
 
 with open(f'./profanities/profanities.txt', 'r') as f:
     profanities = f.readlines()
@@ -61,6 +64,12 @@ async def gooba(ctx):
 async def cock(ctx):
     await flushed(ctx.message)
     await ctx.send(nice_cock)
+
+@bot.command(name='yntkts', help='Ya ndak tau kok tanya saya')
+@commands.cooldown(1, 3, commands.BucketType.guild)
+async def yntkts(ctx):
+    await flushed(ctx.message)
+    await ctx.send(zukowei)
 
 @bot.command(name='meme', help='Yes, memes')
 @commands.cooldown(1, 3, commands.BucketType.guild)
