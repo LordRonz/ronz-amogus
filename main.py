@@ -65,7 +65,7 @@ async def cock(ctx):
     await flushed(ctx.message)
     await ctx.send(nice_cock)
 
-@bot.command(name='yntkts', help='Ya ndak tau kok tanya saya')
+@bot.command(name='yntkts', help='YO NDAK TAU KOK TANYA SAYA')
 @commands.cooldown(1, 3, commands.BucketType.guild)
 async def yntkts(ctx):
     await flushed(ctx.message)
