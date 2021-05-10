@@ -8,6 +8,7 @@ from keep_alive import keep_alive
 from add_reaction import flushed
 from meme_handler import get_meme
 from hentai_handler import random_hentai, check_valid_hentai
+from xkcd import Xkcd
 
 read_env()
 
@@ -78,6 +79,16 @@ async def meme(ctx):
     title, permalink, url = await get_meme()
     embed = discord.Embed(title=title, url=permalink, color=0xff0000)
     embed.set_image(url=url)
+    await ctx.send(embed=embed)
+
+@bot.command(name='xkcd', help='Get random xkcd')
+@commands.cooldown(1, 3, commands.BucketType.guild)
+async def xkcd(ctx):
+    await flushed(ctx.message)
+    xkcd = Xkcd()
+    comic = await xkcd.get()
+    embed = discord.Embed(title=comic['title'], url=comic['url'], color=0xff0000)
+    embed.set_image(url=comic['img'])
     await ctx.send(embed=embed)
 
 @bot.event
