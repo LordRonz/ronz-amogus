@@ -84,7 +84,7 @@ class RequestHandler(object):
                     response.json = await response.json()
         return response
 
-class Hentai():
+class Hentai(object):
     HOME = "https://nhentai.net/" 
     _URL = urljoin(HOME, '/g/')
     _API = urljoin(HOME, '/api/gallery/')
