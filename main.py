@@ -7,6 +7,7 @@ from random import choice
 from keep_alive import keep_alive
 from add_reaction import flushed
 from meme_handler import get_meme
+from r34_handler import get_r34
 from hentai_handler import random_hentai, check_valid_hentai
 from xkcd import Xkcd
 
@@ -44,45 +45,52 @@ async def on_ready():
 
 @bot.command(name='amogus', help='When the impostor is sus 😳')
 @commands.cooldown(1, 3, commands.BucketType.guild)
+@commands.guild_only()
 async def amogus(ctx):
     await flushed(ctx.message)
     await ctx.send(choice(amoguses))
 
 @bot.command(name='swear', help='Fuck')
 @commands.cooldown(1, 3, commands.BucketType.guild)
+@commands.guild_only()
 async def swear(ctx):
     await flushed(ctx.message)
     await ctx.send(choice(profanities))
 
 @bot.command(name='gooba', help='Gooba Lyrics')
 @commands.cooldown(1, 3, commands.BucketType.guild)
+@commands.guild_only()
 async def gooba(ctx):
     await flushed(ctx.message)
     await ctx.send(gooba_lyrics)
 
 @bot.command(name='cock', help='Nice COCK')
 @commands.cooldown(1, 3, commands.BucketType.guild)
+@commands.guild_only()
 async def cock(ctx):
     await flushed(ctx.message)
     await ctx.send(nice_cock)
 
 @bot.command(name='yntkts', help='YO NDAK TAU KOK TANYA SAYA')
 @commands.cooldown(1, 3, commands.BucketType.guild)
+@commands.guild_only()
 async def yntkts(ctx):
     await flushed(ctx.message)
     await ctx.send(zukowei)
 
 @bot.command(name='meme', help='Yes, memes')
 @commands.cooldown(1, 3, commands.BucketType.guild)
+@commands.guild_only()
 async def meme(ctx):
     await flushed(ctx.message)
-    title, permalink, url = await get_meme()
-    embed = discord.Embed(title=title, url=permalink, color=0xff0000)
-    embed.set_image(url=url)
+    meme = await get_meme()
+    embed = discord.Embed(title=meme['title'], url=meme['permalink'], color=0xff0000)
+    embed.set_image(url=meme['img'])
     await ctx.send(embed=embed)
 
 @bot.command(name='xkcd', help='Get random xkcd')
 @commands.cooldown(1, 3, commands.BucketType.guild)
+@commands.guild_only()
 async def xkcd(ctx):
     await flushed(ctx.message)
     xkcd = Xkcd()
@@ -95,7 +103,7 @@ async def xkcd(ctx):
 async def on_reaction_add(reaction, user):
     if user == bot.user or user.bot:
         return
-    if reaction.message.author != bot.user:
+    if reaction.message.author != bot.user or not reaction.message.guild:
         return
     if reaction.emoji != '➡️' and reaction.emoji != '⬅️':
         return
@@ -111,6 +119,7 @@ async def on_reaction_add(reaction, user):
 
 @bot.command(name='hentai', help='Warning: NSFW')
 @commands.cooldown(1, 30, commands.BucketType.guild)
+@commands.guild_only()
 async def hentai(ctx, id=None):
     await flushed(ctx.message)
     if id and not id.isnumeric():
@@ -122,9 +131,19 @@ async def hentai(ctx, id=None):
     await message.add_reaction('⬅️')
     await message.add_reaction('➡️')
 
+@bot.command(name='r34', help='Warning: NSFW')
+@commands.cooldown(1, 30, commands.BucketType.guild)
+@commands.guild_only()
+async def rule34(ctx, id=None):
+    await flushed(ctx.message)
+    r34 = await get_r34()
+    embed = discord.Embed(title=r34['title'], url=r34['permalink'], color=0xff0000)
+    embed.set_image(url=r34['img'])
+    await ctx.send(embed=embed)
+
 @bot.listen('on_message')
 async def sus(message):
-    if message.author == bot.user or message.author.bot:
+    if message.author == bot.user or message.author.bot or not message.guild:
         return
     if 'sus' in message.content.lower():
         await flushed(message)
