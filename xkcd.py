@@ -20,8 +20,8 @@ class Xkcd(object):
         rand = Xkcd.get_rand(latest)
 
         async with aiohttp.ClientSession() as session:
-            base_url = f'{self._URL}{rand}'
-            api_url = f'{base_url}/{self._TAIL}'
+            base_url = f'{self._URL}{rand}/'
+            api_url = f'{base_url}{self._TAIL}'
             async with session.get(api_url, headers=headers) as res:
                 json = await res.json()
                 img_url = json['img']
