@@ -24,10 +24,12 @@ class Xkcd(object):
             api_url = f'{base_url}{self._TAIL}'
             async with session.get(api_url, headers=headers) as res:
                 json = await res.json()
-                img_url = json['img']
-                title = json['title']
+                
+        img_url = json['img']
+        title = json['title']
+        desc = json['alt']
 
-        return {'url': base_url, 'title': title, 'img': img_url}
+        return {'url': base_url, 'title': title, 'img': img_url, 'desc': desc}
 
     @staticmethod
     def get_rand(latest: int) -> str:
