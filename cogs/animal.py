@@ -8,7 +8,7 @@ class Animal(commands.Cog):
         self.bot = bot
 
     @commands.command(name='cat', aliases=['pussy', 'kitty', 'meow'])
-    @commands.cooldown(1, 30, commands.BucketType.guild)
+    @commands.cooldown(1, 6.9, commands.BucketType.guild)
     @commands.guild_only()
     async def cat(self, ctx):
         '''Lets see some pussies!'''
@@ -17,7 +17,7 @@ class Animal(commands.Cog):
         await ctx.send(await get_cat())
 
     @commands.command(name='dog', aliases=['doggo', 'puppy', 'bork'])
-    @commands.cooldown(1, 30, commands.BucketType.guild)
+    @commands.cooldown(1, 6.9, commands.BucketType.guild)
     @commands.guild_only()
     async def dog(self, ctx):
         '''Bork Bork! 🐶'''
