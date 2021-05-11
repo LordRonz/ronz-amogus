@@ -13,6 +13,7 @@ extensions = [
     'cogs.memer',
     'cogs.ascii_art',
     'cogs.nsfw',
+    'cogs.animal',
 ]
 
 bot = commands.Bot(
