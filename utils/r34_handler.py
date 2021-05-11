@@ -1,4 +1,4 @@
-from reddit import Reddit
+from utils.reddit import Reddit
 
 async def get_r34():
     reddit = Reddit('rule34')

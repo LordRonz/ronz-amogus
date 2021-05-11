@@ -1,4 +1,4 @@
-from Hentai import Hentai, Utils, Format
+from utils.Hentai import Hentai, Utils, Format
 import aiohttp
 
 EXT = ('jpg', 'png', 'gif')
@@ -10,7 +10,7 @@ async def random_hentai(id: int=0):
     doujin = await Hentai.init(id) if id else await Utils.get_random_hentai()
     return doujin.title(Format.Pretty), doujin.url, doujin.image_urls[0]
 
-async def check_valid_hentai(embed,inc=True):
+async def nhentai_update(embed,inc=True):
     content = embed.image.url
     extension = content.split('/')[-1].split('.')[-1]
     index = int(content.split('/')[-1].replace(f'.{extension}', ''))

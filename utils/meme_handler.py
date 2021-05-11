@@ -1,4 +1,4 @@
-from reddit import Reddit
+from utils.reddit import Reddit
 from random import choice
 
 SUBREDDITS = ['dankmemes', 'memes']
