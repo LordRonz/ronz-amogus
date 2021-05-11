@@ -10,7 +10,7 @@ class Memer(commands.Cog):
         self.xkcd = Xkcd()
 
     @commands.command(name='meme')
-    @commands.cooldown(1, 3, commands.BucketType.guild)
+    @commands.cooldown(1, 6.9, commands.BucketType.guild)
     @commands.guild_only()
     async def meme(self, ctx):
         '''
@@ -24,7 +24,7 @@ class Memer(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(name='xkcd')
-    @commands.cooldown(1, 3, commands.BucketType.guild)
+    @commands.cooldown(1, 6.9, commands.BucketType.guild)
     @commands.guild_only()
     async def xkcd(self, ctx):
         '''
