@@ -1,6 +1,7 @@
 from discord.ext import commands
 from utils.add_reaction import flushed
 from utils.yomomma import get_yomomma
+from utils.emojifier import get_emojified_text
 from random import choice
 import requests
 
@@ -57,6 +58,13 @@ class Text(commands.Cog):
         await flushed(ctx.message)
         joke = await get_yomomma()
         await ctx.send(joke)
+
+    @commands.command(name='emojify')
+    @commands.cooldown(1, 10, commands.BucketType.guild)
+    @commands.guild_only()
+    async def emojify(self, ctx, *, msg: str):
+        '''Make the bot say whatever you want with emojis!'''
+        await ctx.send(await get_emojified_text(msg))
 
 def setup(bot):
     bot.add_cog(Text(bot))
