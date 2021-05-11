@@ -16,7 +16,7 @@ SPECIALCODES = {
     ' ': '   '
 }
 
-async def get_emojified_text(msg: str):
+async def get_emojified_text(msg: str) -> str:
     if len(msg) > 69:
         return 'Keep it under 69 characters fam'
 

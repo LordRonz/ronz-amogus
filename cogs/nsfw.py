@@ -46,7 +46,7 @@ class Nsfw(commands.Cog):
         await message.add_reaction('⬅️')
         await message.add_reaction('➡️')
 
-    @commands.command(name='r34', aliases=['rule34', 'rule 34'])
+    @commands.command(name='r34', aliases=['rule34'])
     @commands.cooldown(1, 30, commands.BucketType.guild)
     @commands.guild_only()
     async def rule34(self, ctx, id=None):
