@@ -2,6 +2,10 @@ from discord.ext import commands
 from utils.hentai_handler import random_hentai, nhentai_update
 from utils.r34_handler import get_r34
 from utils.add_reaction import flushed
+from utils.nekoslife_handler import (
+    get_hentai,
+    get_hentai_gif,
+)
 import discord
 
 class Nsfw(commands.Cog):
@@ -26,10 +30,10 @@ class Nsfw(commands.Cog):
         if new_embed:
             await message.edit(embed=new_embed)
 
-    @commands.command(name='hentai')
+    @commands.command(name='nhentai')
     @commands.cooldown(1, 30, commands.BucketType.guild)
     @commands.guild_only()
-    async def hentai(self, ctx, id :str=''):
+    async def nhentai(self, ctx, id :str=''):
         '''Fetch random hentai from nhentai'''
 
         await flushed(ctx.message)
@@ -42,7 +46,7 @@ class Nsfw(commands.Cog):
         await message.add_reaction('⬅️')
         await message.add_reaction('➡️')
 
-    @commands.command(name='r34')
+    @commands.command(name='r34', aliases=['rule34', 'rule 34'])
     @commands.cooldown(1, 30, commands.BucketType.guild)
     @commands.guild_only()
     async def rule34(self, ctx, id=None):
@@ -53,6 +57,26 @@ class Nsfw(commands.Cog):
         embed = discord.Embed(title=r34['title'], url=r34['permalink'], color=0xff0000)
         embed.set_image(url=r34['img'])
         await ctx.send(embed=embed)
+
+    @commands.command(name='hentaigif')
+    @commands.cooldown(1, 30, commands.BucketType.guild)
+    @commands.guild_only()
+    async def hentaigif(self, ctx, id=None):
+        '''Fetch random hentai gif'''
+
+        await flushed(ctx.message)
+        hentai_gif = await get_hentai_gif()
+        await ctx.send(hentai_gif)
+    
+    @commands.command(name='hentai')
+    @commands.cooldown(1, 30, commands.BucketType.guild)
+    @commands.guild_only()
+    async def hentai(self, ctx, id=None):
+        '''Fetch random hentai'''
+
+        await flushed(ctx.message)
+        hentai = await get_hentai()
+        await ctx.send(hentai)
 
 def setup(bot):
     bot.add_cog(Nsfw(bot))

@@ -1,5 +1,6 @@
 from discord.ext import commands
 from utils.add_reaction import flushed
+from utils.yomomma import get_yomomma
 from random import choice
 import requests
 
@@ -47,6 +48,15 @@ class Text(commands.Cog):
 
         await flushed(ctx.message)
         await ctx.send(self.gooba_lyrics)
+
+    @commands.command(name='yomomma', aliases=['yomama'])
+    @commands.cooldown(1, 3, commands.BucketType.guild)
+    @commands.guild_only()
+    async def yomomma(self, ctx):
+        '''Random yo momma joke'''
+        await flushed(ctx.message)
+        joke = await get_yomomma()
+        await ctx.send(joke)
 
 def setup(bot):
     bot.add_cog(Text(bot))
