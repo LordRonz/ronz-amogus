@@ -33,7 +33,7 @@ class Memer(commands.Cog):
 
         await flushed(ctx.message)
         comic = await self.xkcd.get()
-        embed = discord.Embed(title=comic['title'], url=comic['url'], color=0xff0000)
+        embed = discord.Embed(title=comic['title'], url=comic['url'], description=comic['desc'], color=0xff0000)
         embed.set_image(url=comic['img'])
         await ctx.send(embed=embed)
 

@@ -6,6 +6,7 @@ from random import choice
 import requests
 
 class Text(commands.Cog):
+    _AMOGUS = '**A M O G U S**'
     def __init__(self, bot):
         self.bot = bot
         self._cd = commands.CooldownMapping.from_cooldown(1, 3, commands.BucketType.guild)
@@ -30,7 +31,7 @@ class Text(commands.Cog):
             if ratelimit:
                 return
             await flushed(message)
-            await message.channel.send('**A M O G U S**')
+            await message.channel.send(self._AMOGUS)
 
     @commands.command(name='swear')
     @commands.cooldown(1, 3, commands.BucketType.guild)
