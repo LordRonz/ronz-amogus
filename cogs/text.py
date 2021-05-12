@@ -32,6 +32,12 @@ class Text(commands.Cog):
                 return
             await flushed(message)
             await message.channel.send(self._AMOGUS)
+            return
+        if self.bot.user.mentioned_in(message):
+            ratelimit = self.get_ratelimit(message)
+            if ratelimit:
+                return
+            await message.channel.send(f'**My prefix here is** {self.bot.command_prefix}')
 
     @commands.command(name='swear')
     @commands.cooldown(1, 3, commands.BucketType.guild)
