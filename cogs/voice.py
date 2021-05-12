@@ -61,7 +61,7 @@ class Music(commands.Cog):
     @commands.guild_only()
     async def join(self, ctx):
         """Joins a voice channel"""
-        if (ctx.voice_client is None) or (ctx.voice_client and ctx.voice_client.is_playing()):
+        if (ctx.voice_client is None) or (ctx.voice_client and not ctx.voice_client.is_playing()):
             if ctx.author.voice:
                 await ctx.author.voice.channel.connect()
             else:
