@@ -1,5 +1,8 @@
 import aiohttp
 from random import randint
+from utils.redis_client import redis_client
+from datetime import timedelta
+import json
 
 class Reddit(object):
     _HOME = 'https://www.reddit.com/'
@@ -10,24 +13,35 @@ class Reddit(object):
         self.url = f'{self._HOME}r/{self.subreddit}/top/.json?sort={self.sort}&t=day&showmedia=true&mediaonly=true&is_self=true&limit={self.limit}'
 
     async def get(self):
-        user_agent = 'ronz-amogus'
-        async with aiohttp.ClientSession() as session:
-            async with session.get(self.url, headers={'User-agent': user_agent}) as res:
-                json = await res.json()
+        data = None
+        cached = await redis_client.r.get(self.subreddit)
+        if cached:
+            data = json.loads(cached)
 
-        json = json['data']['children']
-        length = len(json) - 1
+        else:
+            user_agent = 'ronz-amogus'
+            async with aiohttp.ClientSession() as session:
+                async with session.get(self.url, headers={'User-agent': user_agent}) as res:
+                    data = await res.json()
+                    data = data['data']['children']
+                    await redis_client.r.setex(
+                        self.subreddit,
+                        timedelta(minutes=69),
+                        value=json.dumps(data),
+                    )
+
+        length = len(data) - 1
         index = 0
 
         img_url = ''
 
         while not Reddit.isValidImg(img_url):
             index = randint(0, length)
-            img_url = json[index]['data']['url']
+            img_url = data[index]['data']['url']
 
-        permalink = f"https://reddit.com{json[index]['data']['permalink']}"
+        permalink = f"https://reddit.com{data[index]['data']['permalink']}"
 
-        title = json[index]['data']['title']
+        title = data[index]['data']['title']
 
         return {'title': title, 'permalink': permalink, 'img': img_url}
 
