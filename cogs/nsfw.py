@@ -39,9 +39,14 @@ class Nsfw(commands.Cog):
         await flushed(ctx.message)
         if id and (not id.isnumeric() or len(id) > 13):
             id = None
-        title, url, img_url = await random_hentai(int(id) if id else None)
-        embed = discord.Embed(title=title, url=url, color=0xff0000)
-        embed.set_image(url=img_url)
+        nh = await random_hentai(int(id) if id else None)
+
+        if not nh:
+            await ctx.send('Hentai not found')
+            return
+
+        embed = discord.Embed(title=nh['title'], url=nh['url'], color=0xff0000)
+        embed.set_image(url=nh['img_url'])
         message = await ctx.send(embed=embed)
         await message.add_reaction('⬅️')
         await message.add_reaction('➡️')

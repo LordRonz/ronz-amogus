@@ -82,6 +82,8 @@ class RequestHandler(object):
             async with session.get(url, headers={ "User-Agent" : RequestHandler._fake.chrome(version_from=80, version_to=86, build_from=4100, build_to=4200) }) as response:
                 if response.headers['content-type'] == 'application/json':
                     response.json = await response.json()
+                if response.status == 404:
+                    return None
         return response
 
 class Hentai(object):
@@ -107,6 +109,8 @@ class Hentai(object):
             self.__url = urljoin(Hentai._URL, str(self.id))
             self.__api = urljoin(Hentai._API, str(self.id))
             self.__response = await self.__handler.get(self.api)
+            if self.__response is None:
+                return None
             self.__json = self.__response.json
         elif not id_ and json:
             self.__json = json

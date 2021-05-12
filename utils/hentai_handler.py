@@ -8,7 +8,12 @@ async def random_hentai(id: int=0):
     Fetch random hentai from nhentai
     '''
     doujin = await Hentai.init(id) if id else await Utils.get_random_hentai()
-    return doujin.title(Format.Pretty), doujin.url, doujin.image_urls[0]
+    if doujin is None:
+        return {}
+    title = doujin.title(Format.Pretty)
+    url = doujin.url
+    img_url = doujin.image_urls[0]
+    return {'title': title, 'url': url, 'img_url': img_url}
 
 async def nhentai_update(embed,inc=True):
     content = embed.image.url
