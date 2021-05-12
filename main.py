@@ -14,6 +14,7 @@ extensions = [
     'cogs.ascii_art',
     'cogs.nsfw',
     'cogs.animal',
+    'cogs.voice',
 ]
 
 bot = commands.Bot(
