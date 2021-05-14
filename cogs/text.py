@@ -4,6 +4,7 @@ from utils.yomomma import get_yomomma
 from utils.emojifier import get_emojified_text
 from random import choice
 import requests
+import discord
 
 class Text(commands.Cog):
     _AMOGUS = '**A M O G U S**'
@@ -15,7 +16,7 @@ class Text(commands.Cog):
         with open(f'./profanities/profanities.txt', 'r') as f:
             self.profanities = f.readlines()
 
-        self.gooba_lyrics = requests.get('http://gist.githubusercontent.com/LordRonz/da8dcbf4cfdd07a19f239f5f6f555299/raw/4e9480c4a2fd8621dc9102b0e72ccf185575e95d/gooba.txt').text
+        self.gooba_lyrics = requests.get('https://gist.githubusercontent.com/LordRonz/da8dcbf4cfdd07a19f239f5f6f555299/raw/1502daebb56ede76e09246d2a839f7a9e0192e05/gooba.txt').text
 
     def get_ratelimit(self, message):
         '''Returns the ratelimit left'''
@@ -55,7 +56,13 @@ class Text(commands.Cog):
         '''Gooba Lyrics'''
 
         await flushed(ctx.message)
-        await ctx.send(self.gooba_lyrics)
+        lyrics = self.gooba_lyrics.split('\n\n')
+        embed = discord.Embed(title='GOOBA', color=0xff0000, author='6ix9ine')
+        embed.add_field(name='[Chorus]', value=lyrics[0], inline=False)
+        embed.add_field(name='[Verse 1]', value=lyrics[1], inline=False)
+        embed.add_field(name='[Chorus]', value=lyrics[2], inline=False)
+        embed.add_field(name='[Verse 2]', value=lyrics[3], inline=False)
+        await ctx.send(embed=embed)
 
     @commands.command(name='yomomma', aliases=['yomama'])
     @commands.cooldown(1, 3, commands.BucketType.guild)
