@@ -23,7 +23,7 @@ extensions = [
 bot = commands.Bot(
         command_prefix='69',
         description='SUS\nAMOGUS',
-        activity=discord.Game(name="ur mum"),
+        activity=discord.Game(name="ur mum | 69help"),
         case_insensitive=True,
         help_command=MyHelpCommand(),
     )
