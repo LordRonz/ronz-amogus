@@ -6,7 +6,14 @@ from utils.nekoslife_handler import (
     get_hentai,
     get_hentai_gif,
 )
+from utils.sauce_handler import get_sauce
 import discord
+import asyncio
+
+def truncate(x: str, n: int):
+    if len(x) < n:
+        return x
+    return x[0 : n - 4] + "..."
 
 class Nsfw(commands.Cog):
     def __init__(self, bot):
@@ -82,6 +89,107 @@ class Nsfw(commands.Cog):
         await flushed(ctx.message)
         hentai = await get_hentai()
         await ctx.send(hentai)
+
+    @commands.command(name='sauce', aliases=['soz'])
+    @commands.cooldown(1, 30, commands.BucketType.guild)
+    @commands.guild_only()
+    async def sauce(self, ctx, *, url=""):
+        '''Usage: 69sauce <url> OR attach an image'''
+
+        await flushed(ctx.message)
+        attachments = ctx.message.attachments
+        if not attachments:
+            if not url:
+                return await ctx.send('')
+            # Remove Discord URL Escape if exists
+            if url.startswith("<"):
+                if url.endswith(">"):
+                    url = url[1:-1]
+                else:
+                    url = url[1:]
+            if url.endswith(">"):
+                url = url[:-1]
+        else:
+            url = attachments[0].url
+
+        resdata = await get_sauce(url)
+        if type(resdata) is dict:
+            if not resdata:
+                return
+            if 'message' in resdata:
+                return await ctx.send(resdata['message'])
+
+        max_page = len(resdata)
+        first_run = True
+        num = 1
+        while True:
+            if first_run:
+                data = resdata[num - 1]
+                embed = await self.sauce_embed(data)
+
+                first_run = False
+                msg = await ctx.send(embed=embed)
+
+            reactmoji = []
+            if max_page == 1 and num == 1:
+                return
+            if num == 1:
+                reactmoji.append('⏩')
+            elif num == max_page:
+                reactmoji.append('⏪')
+            elif num > 1 and num < max_page:
+                reactmoji.extend(['⏪', '⏩'])
+            reactmoji.append('✅')
+
+            for react in reactmoji:
+                await msg.add_reaction(react)
+
+            def check_react(reaction, user):
+                if reaction.message.id != msg.id:
+                    return False
+                if user != ctx.message.author:
+                    return False
+                if str(reaction.emoji) not in reactmoji:
+                    return False
+                return True
+
+            try:
+                res, user = await self.bot.wait_for("reaction_add", timeout=30.0, check=check_react)
+            except asyncio.TimeoutError:
+                return await msg.clear_reactions()
+
+            if user != ctx.message.author:
+                pass
+            elif "⏪" in str(res.emoji):
+                num = num - 1
+                data = resdata[num - 1]
+                embed = await self.sauce_embed(data)
+
+                await msg.clear_reactions()
+                await msg.edit(embed=embed)
+            elif "⏩" in str(res.emoji):
+                num = num + 1
+                data = resdata[num - 1]
+                embed = await self.sauce_embed(data)
+
+                await msg.clear_reactions()
+                await msg.edit(embed=embed)
+            elif "✅" in str(res.emoji):
+                await ctx.message.delete()
+                return await msg.delete()
+
+    async def sauce_embed(self, data: dict) -> discord.Embed:
+        embed = discord.Embed(title=truncate(data.title, 256), color=0xff0000)
+        desc = ''
+        if data.urls:
+            desc = '\n'.join(f'[Source]({url})' for url in data.urls)
+        else:
+            desc = 'Unknown Source'
+        embed.description = desc
+
+        embed.set_image(url=data.thumbnail)
+        embed.set_footer(text=f'Similarity: {data.similarity}% | Powered by saucenao.com')
+        return embed
 
 def setup(bot):
     bot.add_cog(Nsfw(bot))
