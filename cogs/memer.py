@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from utils.add_reaction import flushed
-from utils.meme_handler import get_meme
+from utils.reddit_handler import get_meme
 from utils.xkcd import Xkcd
 
 class Memer(commands.Cog):

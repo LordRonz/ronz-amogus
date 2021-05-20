@@ -7,6 +7,7 @@ from utils.nekoslife_handler import (
     get_hentai_gif,
 )
 from utils.sauce_handler import get_sauce
+from utils.reddit_handler import get_agw, get_gw
 import discord
 import asyncio
 
@@ -18,6 +19,15 @@ def truncate(x: str, n: int):
 class Nsfw(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+
+    async def cog_check(self, ctx):
+        if ctx.channel and ctx.channel.is_nsfw():
+            return True
+        
+        if ctx.channel:
+            await ctx.send('NSFW channel required!')
+        
+        return False
 
     @commands.Cog.listener('on_reaction_add')
     async def nhentai_nav(self, reaction, user):
@@ -93,6 +103,32 @@ class Nsfw(commands.Cog):
             await flushed(ctx.message)
             hentai = await get_hentai()
             await ctx.send(hentai)
+
+    @commands.command(name='agw', aliases=['asiansgonewild'])
+    @commands.cooldown(1, 30, commands.BucketType.guild)
+    @commands.guild_only()
+    async def agw(self, ctx, id=None):
+        '''Fetch random ( ͡° ͜ʖ ͡°) from r/asiansgonewild'''
+
+        async with ctx.typing():
+            await flushed(ctx.message)
+            agw = await get_agw()
+            embed = discord.Embed(title=agw['title'], url=agw['permalink'], color=0xff0000)
+            embed.set_image(url=agw['img'])
+            await ctx.send(embed=embed)
+
+    @commands.command(name='gw', aliases=['gonewild'])
+    @commands.cooldown(1, 30, commands.BucketType.guild)
+    @commands.guild_only()
+    async def gw(self, ctx, id=None):
+        '''Fetch random ( ͡° ͜ʖ ͡°) from r/gonewild'''
+
+        async with ctx.typing():
+            await flushed(ctx.message)
+            gw = await get_gw()
+            embed = discord.Embed(title=gw['title'], url=gw['permalink'], color=0xff0000)
+            embed.set_image(url=gw['img'])
+            await ctx.send(embed=embed)
 
     @commands.command(name='sauce', aliases=['soz'])
     @commands.cooldown(1, 30, commands.BucketType.guild)
