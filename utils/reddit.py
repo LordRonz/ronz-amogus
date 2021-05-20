@@ -6,11 +6,12 @@ import json
 
 class Reddit(object):
     _HOME = 'https://www.reddit.com/'
-    def __init__(self, subreddit: str, sort: str='top', limit: int=69):
+    def __init__(self, subreddit: str, sort: str='top', limit: int=69, time='day'):
         self.subreddit = subreddit
         self.sort = sort
         self.limit = limit
-        self.url = f'{self._HOME}r/{self.subreddit}/top/.json?sort={self.sort}&t=day&showmedia=true&mediaonly=true&is_self=true&limit={self.limit}'
+        self.time = time
+        self.url = f'{self._HOME}r/{self.subreddit}/top/.json?sort={self.sort}&t={self.time}&showmedia=true&mediaonly=true&is_self=true&limit={self.limit}'
 
     async def get(self):
         data = None
@@ -42,7 +43,6 @@ class Reddit(object):
         permalink = f"https://reddit.com{data[index]['data']['permalink']}"
 
         title = data[index]['data']['title']
-
         return {'title': title, 'permalink': permalink, 'img': img_url}
 
     @staticmethod
