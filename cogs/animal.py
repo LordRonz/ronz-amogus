@@ -13,8 +13,9 @@ class Animal(commands.Cog):
     async def cat(self, ctx):
         '''Lets see some pussies!'''
 
-        await flushed(ctx.message)
-        await ctx.send(await get_cat())
+        async with ctx.typing():
+            await flushed(ctx.message)
+            await ctx.send(await get_cat())
 
     @commands.command(name='dog', aliases=['doggo', 'puppy', 'bork'])
     @commands.cooldown(1, 6.9, commands.BucketType.guild)
@@ -22,8 +23,9 @@ class Animal(commands.Cog):
     async def dog(self, ctx):
         '''Bork Bork! 🐶'''
 
-        await flushed(ctx.message)
-        await ctx.send(await get_doggo())
+        async with ctx.typing():
+            await flushed(ctx.message)
+            await ctx.send(await get_doggo())
 
 def setup(bot):
     bot.add_cog(Animal(bot))

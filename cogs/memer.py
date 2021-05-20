@@ -16,12 +16,13 @@ class Memer(commands.Cog):
         '''
         Fetch random meme from r/dankmemes or r/memes
         '''
-        
-        await flushed(ctx.message)
-        meme = await get_meme()
-        embed = discord.Embed(title=meme['title'], url=meme['permalink'], color=0xff0000)
-        embed.set_image(url=meme['img'])
-        await ctx.send(embed=embed)
+
+        async with ctx.typing():
+            await flushed(ctx.message)
+            meme = await get_meme()
+            embed = discord.Embed(title=meme['title'], url=meme['permalink'], color=0xff0000)
+            embed.set_image(url=meme['img'])
+            await ctx.send(embed=embed)
 
     @commands.command(name='xkcd')
     @commands.cooldown(1, 6.9, commands.BucketType.guild)
@@ -31,11 +32,12 @@ class Memer(commands.Cog):
         Fetch random xkcd comic
         '''
 
-        await flushed(ctx.message)
-        comic = await self.xkcd.get()
-        embed = discord.Embed(title=comic['title'], url=comic['url'], description=comic['desc'], color=0xff0000)
-        embed.set_image(url=comic['img'])
-        await ctx.send(embed=embed)
+        async with ctx.typing():
+            await flushed(ctx.message)
+            comic = await self.xkcd.get()
+            embed = discord.Embed(title=comic['title'], url=comic['url'], description=comic['desc'], color=0xff0000)
+            embed.set_image(url=comic['img'])
+            await ctx.send(embed=embed)
 
 def setup(bot):
     bot.add_cog(Memer(bot))
