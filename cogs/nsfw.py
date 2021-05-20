@@ -43,20 +43,21 @@ class Nsfw(commands.Cog):
     async def nhentai(self, ctx, id :str=''):
         '''Fetch random hentai from nhentai'''
 
-        await flushed(ctx.message)
-        if id and (not id.isnumeric() or len(id) > 13):
-            id = None
-        nh = await random_hentai(int(id) if id else None)
+        async with ctx.typing():
+            await flushed(ctx.message)
+            if id and (not id.isnumeric() or len(id) > 13):
+                id = None
+            nh = await random_hentai(int(id) if id else None)
 
-        if not nh:
-            await ctx.send('Hentai not found')
-            return
+            if not nh:
+                await ctx.send('Hentai not found')
+                return
 
-        embed = discord.Embed(title=nh['title'], url=nh['url'], color=0xff0000)
-        embed.set_image(url=nh['img_url'])
-        message = await ctx.send(embed=embed)
-        await message.add_reaction('⬅️')
-        await message.add_reaction('➡️')
+            embed = discord.Embed(title=nh['title'], url=nh['url'], color=0xff0000)
+            embed.set_image(url=nh['img_url'])
+            message = await ctx.send(embed=embed)
+            await message.add_reaction('⬅️')
+            await message.add_reaction('➡️')
 
     @commands.command(name='r34', aliases=['rule34'])
     @commands.cooldown(1, 30, commands.BucketType.guild)
@@ -64,11 +65,12 @@ class Nsfw(commands.Cog):
     async def rule34(self, ctx, id=None):
         '''Fetch random pic from r/rule34'''
 
-        await flushed(ctx.message)
-        r34 = await get_r34()
-        embed = discord.Embed(title=r34['title'], url=r34['permalink'], color=0xff0000)
-        embed.set_image(url=r34['img'])
-        await ctx.send(embed=embed)
+        async with ctx.typing():
+            await flushed(ctx.message)
+            r34 = await get_r34()
+            embed = discord.Embed(title=r34['title'], url=r34['permalink'], color=0xff0000)
+            embed.set_image(url=r34['img'])
+            await ctx.send(embed=embed)
 
     @commands.command(name='hentaigif')
     @commands.cooldown(1, 30, commands.BucketType.guild)
@@ -76,9 +78,10 @@ class Nsfw(commands.Cog):
     async def hentaigif(self, ctx, id=None):
         '''Fetch random hentai gif'''
 
-        await flushed(ctx.message)
-        hentai_gif = await get_hentai_gif()
-        await ctx.send(hentai_gif)
+        async with ctx.typing():
+            await flushed(ctx.message)
+            hentai_gif = await get_hentai_gif()
+            await ctx.send(hentai_gif)
     
     @commands.command(name='hentai')
     @commands.cooldown(1, 30, commands.BucketType.guild)
@@ -86,9 +89,10 @@ class Nsfw(commands.Cog):
     async def hentai(self, ctx, id=None):
         '''Fetch random hentai'''
 
-        await flushed(ctx.message)
-        hentai = await get_hentai()
-        await ctx.send(hentai)
+        async with ctx.typing():
+            await flushed(ctx.message)
+            hentai = await get_hentai()
+            await ctx.send(hentai)
 
     @commands.command(name='sauce', aliases=['soz'])
     @commands.cooldown(1, 30, commands.BucketType.guild)
@@ -96,28 +100,29 @@ class Nsfw(commands.Cog):
     async def sauce(self, ctx, *, url=""):
         '''Usage: 69sauce <url> OR attach an image'''
 
-        await flushed(ctx.message)
-        attachments = ctx.message.attachments
-        if not attachments:
-            if not url:
-                return await ctx.send('')
-            # Remove Discord URL Escape if exists
-            if url.startswith("<"):
+        async with ctx.typing():
+            await flushed(ctx.message)
+            attachments = ctx.message.attachments
+            if not attachments:
+                if not url:
+                    return await ctx.send('')
+                # Remove Discord URL Escape if exists
+                if url.startswith("<"):
+                    if url.endswith(">"):
+                        url = url[1:-1]
+                    else:
+                        url = url[1:]
                 if url.endswith(">"):
-                    url = url[1:-1]
-                else:
-                    url = url[1:]
-            if url.endswith(">"):
-                url = url[:-1]
-        else:
-            url = attachments[0].url
+                    url = url[:-1]
+            else:
+                url = attachments[0].url
 
-        resdata = await get_sauce(url)
-        if type(resdata) is dict:
-            if not resdata:
-                return
-            if 'message' in resdata:
-                return await ctx.send(resdata['message'])
+            resdata = await get_sauce(url)
+            if type(resdata) is dict:
+                if not resdata:
+                    return
+                if 'message' in resdata:
+                    return await ctx.send(resdata['message'])
 
         max_page = len(resdata)
         first_run = True
