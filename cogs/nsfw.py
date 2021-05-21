@@ -20,7 +20,7 @@ class Nsfw(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    async def cog_check(self, ctx):
+    async def nsfw_check(self, ctx):
         if ctx.channel and ctx.channel.is_nsfw():
             return True
         
@@ -53,6 +53,9 @@ class Nsfw(commands.Cog):
     async def nhentai(self, ctx, id :str=''):
         '''Fetch random hentai from nhentai'''
 
+        if not await self.nsfw_check(ctx):
+            return
+
         async with ctx.typing():
             await flushed(ctx.message)
             if id and (not id.isnumeric() or len(id) > 13):
@@ -75,6 +78,9 @@ class Nsfw(commands.Cog):
     async def rule34(self, ctx, id=None):
         '''Fetch random pic from r/rule34'''
 
+        if not await self.nsfw_check(ctx):
+            return
+
         async with ctx.typing():
             await flushed(ctx.message)
             r34 = await get_r34()
@@ -88,6 +94,9 @@ class Nsfw(commands.Cog):
     async def hentaigif(self, ctx, id=None):
         '''Fetch random hentai gif'''
 
+        if not await self.nsfw_check(ctx):
+            return
+
         async with ctx.typing():
             await flushed(ctx.message)
             hentai_gif = await get_hentai_gif()
@@ -99,6 +108,9 @@ class Nsfw(commands.Cog):
     async def hentai(self, ctx, id=None):
         '''Fetch random hentai'''
 
+        if not await self.nsfw_check(ctx):
+            return
+
         async with ctx.typing():
             await flushed(ctx.message)
             hentai = await get_hentai()
@@ -109,6 +121,9 @@ class Nsfw(commands.Cog):
     @commands.guild_only()
     async def agw(self, ctx, id=None):
         '''Fetch random ( ͡° ͜ʖ ͡°) from r/asiansgonewild'''
+
+        if not await self.nsfw_check(ctx):
+            return
 
         async with ctx.typing():
             await flushed(ctx.message)
@@ -123,6 +138,9 @@ class Nsfw(commands.Cog):
     async def gw(self, ctx, id=None):
         '''Fetch random ( ͡° ͜ʖ ͡°) from r/gonewild'''
 
+        if not await self.nsfw_check(ctx):
+            return
+
         async with ctx.typing():
             await flushed(ctx.message)
             gw = await get_gw()
@@ -135,6 +153,9 @@ class Nsfw(commands.Cog):
     @commands.guild_only()
     async def sauce(self, ctx, *, url=""):
         '''Usage: 69sauce <url> OR attach an image'''
+
+        if not await self.nsfw_check(ctx):
+                    return
 
         async with ctx.typing():
             await flushed(ctx.message)
