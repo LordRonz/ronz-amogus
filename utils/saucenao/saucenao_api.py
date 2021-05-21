@@ -6,7 +6,6 @@ import aiohttp
 from utils.saucenao.containers import SauceResponse
 from utils.saucenao.params import _OutputType, DB, Hide, BgColor
 
-
 class SauceNao:
     SAUCENAO_URL = 'https://saucenao.com/search.php'
 
@@ -23,7 +22,7 @@ class SauceNao:
                 bgcolor:  int = BgColor.NONE,
                 ) -> None:
 
-        params = dict()
+        params = {}
 
         if api_key is not None:
             params['api_key'] = api_key

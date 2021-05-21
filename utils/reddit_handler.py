@@ -1,7 +1,7 @@
 from utils.reddit import Reddit
 from random import choice
 
-SUBREDDITS = ['dankmemes', 'memes']
+SUBREDDITS = ('dankmemes', 'memes')
 
 async def get_meme():
     reddit = Reddit(choice(SUBREDDITS))

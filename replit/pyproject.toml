@@ -10,9 +10,10 @@ discord = "^1.0.1"
 PyNaCl = "^1.4.0"
 flask = "^1.1.2"
 faker = "^8.1.2"
-redis = "^3.5.3"
 aredis = "^1.1.8"
 youtube-dl = "^2021.4.26"
+ujson = "^4.0.2"
+aiohttp = "^3.7.4"
 
 [tool.poetry.dev-dependencies]
 
