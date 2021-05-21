@@ -5,6 +5,7 @@ def main():
     from read_env import read_env
     from keep_alive import keep_alive
     from utils.custom_help import MyHelpCommand
+    from itertools import cycle
     import logging
     import gc
 
@@ -27,12 +28,19 @@ def main():
     log = logging.getLogger('ronz-AMOGUS')
     log.setLevel(logging.INFO)
 
+    activities = cycle((
+        'ur mum',
+        'ur sis',
+        'ur aunt',
+        'ur stepsis',
+        'ur dad\'s wife',
+    ))
+
     CMD_PREFIX = '69'
 
     bot = commands.Bot(
             command_prefix=CMD_PREFIX,
             description='SUS\nAMOGUS',
-            activity=discord.Game(name=f'ur mum | {CMD_PREFIX}help'),
             case_insensitive=True,
             help_command=MyHelpCommand(),
         )
@@ -46,12 +54,17 @@ def main():
         print(f'\n\nLogged in as: {bot.user.name} - {bot.user.id}\nVersion: {discord.__version__}\n')
         print(f'Cogs loaded: \n{bot.cogs.keys()}')
         garbage_collector.start()
+        change_presence.start()
 
     @tasks.loop(hours=12)
     async def garbage_collector():
         log.info('running garbage collection...')
         collected = gc.collect()
         log.info(f'collected {collected} objects')
+
+    @tasks.loop(minutes=30)
+    async def change_presence():
+        await bot.change_presence(activity=discord.Game(f'{next(activities)} | {CMD_PREFIX}help'))
 
     for extension in extensions:
             bot.load_extension(extension)
