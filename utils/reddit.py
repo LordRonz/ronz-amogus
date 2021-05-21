@@ -2,7 +2,7 @@ import aiohttp
 from random import randint
 from utils.redis_client import redis_client
 from datetime import timedelta
-import json
+import ujson as json
 
 class Reddit(object):
     _HOME = 'https://www.reddit.com/'
