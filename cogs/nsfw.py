@@ -187,24 +187,18 @@ class Nsfw(commands.Cog):
         while True:
             if first_run:
                 data = resdata[num - 1]
-                embed = await self.sauce_embed(data)
+                embed = await self.sauce_embed(data, num, max_page)
 
                 first_run = False
                 msg = await ctx.send(embed=embed)
 
-            reactmoji = []
-            if max_page == 1 and num == 1:
-                return
-            if num == 1:
-                reactmoji.append('⏩')
-            elif num == max_page:
-                reactmoji.append('⏪')
-            elif num > 1 and num < max_page:
-                reactmoji.extend(['⏪', '⏩'])
-            reactmoji.append('✅')
+                if max_page == 1 and num == 1:
+                    return
 
-            for react in reactmoji:
-                await msg.add_reaction(react)
+                reactmoji = ('⏪', '⏩', '✅')
+
+                for react in reactmoji:
+                    await msg.add_reaction(react)
 
             def check_react(reaction, user):
                 if reaction.message.id != msg.id:
@@ -218,35 +212,34 @@ class Nsfw(commands.Cog):
             try:
                 res, user = await self.bot.wait_for("reaction_add", timeout=30.0, check=check_react)
             except asyncio.TimeoutError:
-                return await msg.clear_reactions()
+                return
 
             if user != ctx.message.author:
                 pass
-            elif "⏪" in str(res.emoji):
-                num = num - 1
-                data = resdata[num - 1]
-                embed = await self.sauce_embed(data)
 
-                await msg.clear_reactions()
+            elif "⏪" in str(res.emoji) and num > 1:
+                num -= 1
+                data = resdata[num - 1]
+                embed = await self.sauce_embed(data, num, max_page)
+
                 await msg.edit(embed=embed)
-            elif "⏩" in str(res.emoji):
-                num = num + 1
+            elif "⏩" in str(res.emoji) and num < max_page:
+                num += 1
                 data = resdata[num - 1]
-                embed = await self.sauce_embed(data)
+                embed = await self.sauce_embed(data, num, max_page)
 
-                await msg.clear_reactions()
                 await msg.edit(embed=embed)
             elif "✅" in str(res.emoji):
-                await ctx.message.delete()
-                return await msg.delete()
+                return
 
-    async def sauce_embed(self, data: dict) -> discord.Embed:
+    async def sauce_embed(self, data: dict, num: int, max_page: int) -> discord.Embed:
         embed = discord.Embed(title=truncate(data.title, 256), color=0xff0000)
         desc = ''
         if data.urls:
             desc = '\n'.join(f'[Source]({url})' for url in data.urls)
         else:
             desc = 'Unknown Source'
+        desc += f'\n> **Page {num}/{max_page}**\n'
         embed.description = desc
 
         embed.set_image(url=data.thumbnail)

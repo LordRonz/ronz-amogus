@@ -1,16 +1,18 @@
 def main():
     import os
     import discord
-    from discord.ext import commands
+    from discord.ext import commands, tasks
     from read_env import read_env
     from keep_alive import keep_alive
     from utils.custom_help import MyHelpCommand
+    import logging
+    import gc
 
     read_env()
 
     TOKEN = os.getenv('TOKEN')
 
-    extensions = [
+    extensions = (
         'cogs.text',
         'cogs.memer',
         'cogs.ascii_art',
@@ -19,12 +21,18 @@ def main():
         'cogs.voice',
         'cogs.error_handler',
         'cogs.owner',
-    ]
+    )
+
+    logging.basicConfig()
+    log = logging.getLogger('ronz-AMOGUS')
+    log.setLevel(logging.INFO)
+
+    CMD_PREFIX = '69'
 
     bot = commands.Bot(
-            command_prefix='69',
+            command_prefix=CMD_PREFIX,
             description='SUS\nAMOGUS',
-            activity=discord.Game(name="ur mum | 69help"),
+            activity=discord.Game(name=f'ur mum | {CMD_PREFIX}help'),
             case_insensitive=True,
             help_command=MyHelpCommand(),
         )
@@ -37,6 +45,13 @@ def main():
     async def on_ready():
         print(f'\n\nLogged in as: {bot.user.name} - {bot.user.id}\nVersion: {discord.__version__}\n')
         print(f'Cogs loaded: \n{bot.cogs.keys()}')
+        garbage_collector.start()
+
+    @tasks.loop(hours=12)
+    async def garbage_collector():
+        log.info('running garbage collection...')
+        collected = gc.collect()
+        log.info(f'collected {collected} objects')
 
     for extension in extensions:
             bot.load_extension(extension)
