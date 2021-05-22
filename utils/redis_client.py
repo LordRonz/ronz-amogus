@@ -1,12 +1,9 @@
-import aredis
+import aioredis
 import os
 
 class RedisClient(object):
     def __init__(self):
-        self.r = aredis.StrictRedis(
-            host=os.getenv('REDIS_HOST'),
-            port=os.getenv('REDIS_PORT'),
-            password=os.getenv('REDIS_PASS'),
-        )
+        address = f"redis://{os.getenv('REDIS_HOST')}:{os.getenv('REDIS_PORT')}"
+        self.r = aioredis.from_url(address, password=os.getenv('REDIS_PASS'))
 
 redis_client = RedisClient()
