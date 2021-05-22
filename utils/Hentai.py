@@ -200,6 +200,13 @@ class Hentai(object):
         """
         return [image.url for image in self.pages]
 
+    @property
+    def num_pages(self) -> int:
+        """
+        Return the total number of pages of this `Hentai` object.
+        """
+        return int(self.json['num_pages'])
+
 class Utils(object):
     """
     Hentai Utility Library
