@@ -60,19 +60,19 @@ class Music(commands.Cog):
     @commands.cooldown(1, 3, commands.BucketType.guild)
     @commands.guild_only()
     async def join(self, ctx):
-        """Joins a voice channel"""
+        '''Joins a voice channel'''
         if (ctx.voice_client is None) or (ctx.voice_client and not ctx.voice_client.is_playing()):
             if ctx.author.voice:
                 await ctx.author.voice.channel.connect()
             else:
-                await ctx.send("You are not connected to a voice channel.")
+                await ctx.send('You are not connected to a voice channel.')
 
 
     @commands.command(aliases=['p'])
     @commands.cooldown(1, 3, commands.BucketType.guild)
     @commands.guild_only()
     async def play(self, ctx, *, url):
-        """Streams from a url"""
+        '''Streams from a url'''
 
         async with ctx.typing():
             player = await YTDLSource.from_url(url, loop=self.bot.loop, stream=True)
@@ -84,15 +84,15 @@ class Music(commands.Cog):
     @commands.cooldown(1, 3, commands.BucketType.guild)
     @commands.guild_only()
     async def volume(self, ctx, vol: int):
-        """Changes the player's volume"""
+        '''Changes the player's volume'''
 
         vc = ctx.voice_client
 
         if not vc or not vc.is_connected():
             return await ctx.send('I am not currently connected to voice!', delete_after=20)
 
-        if not 0 < vol < 101:
-            return await ctx.send('Please enter a value between 1 and 100.')
+        if not 0 < vol < 201:
+            return await ctx.send('Please enter a value between 1 and 200.')
 
         if vc.source:
             vc.source.volume = vol / 100
@@ -103,7 +103,7 @@ class Music(commands.Cog):
     @commands.cooldown(1, 3, commands.BucketType.guild)
     @commands.guild_only()
     async def stop(self, ctx):
-        """Stops and disconnects the bot from voice"""
+        '''Stops and disconnects the bot from voice'''
 
         await ctx.voice_client.disconnect()
 
@@ -113,8 +113,8 @@ class Music(commands.Cog):
             if ctx.author.voice:
                 await ctx.author.voice.channel.connect()
             else:
-                await ctx.send("You are not connected to a voice channel.")
-                raise commands.CommandError("Author not connected to a voice channel.")
+                await ctx.send('You are not connected to a voice channel.')
+                raise commands.CommandError('Author not connected to a voice channel.')
         elif ctx.voice_client.is_playing():
             ctx.voice_client.stop()
 

@@ -15,11 +15,11 @@ import asyncio
 def truncate(x: str, n: int):
     if len(x) < n:
         return x
-    return x[0 : n - 4] + "..."
+    return x[0 : n - 4] + '...'
 
 class Nsfw(commands.Cog):
-    NH_REACTMOJI = ('⏪', '◀', '▶', '⏩', '✅')
-    SAUCE_REACTMOJI = ('⏪', '⏩', '✅')
+    NH_REACTMOJI = ('⏪', '⬅', '➡', '⏩', '✅')
+    SAUCE_REACTMOJI = ('⬅', '➡', '✅')
 
     def __init__(self, bot):
         self.bot = bot
@@ -44,8 +44,7 @@ class Nsfw(commands.Cog):
         if not await self.nsfw_check(ctx):
             return
 
-        guild_id = str(ctx.guild.id)
-        if guild_id in self.__reading_nhentai:
+        if (guild_id := str(ctx.guild.id)) in self.__reading_nhentai:
             await ctx.send('This server is still reading a doujin!')
             return
 
@@ -88,7 +87,7 @@ class Nsfw(commands.Cog):
                 return True
 
             try:
-                res, user = await self.bot.wait_for("reaction_add", timeout=30.69, check=check_react)
+                reaction, user = await self.bot.wait_for('reaction_add', timeout=30.69, check=check_react)
             except asyncio.TimeoutError:
                 self.__reading_nhentai.discard(guild_id)
                 return
@@ -96,31 +95,31 @@ class Nsfw(commands.Cog):
             if user != ctx.message.author:
                 pass
 
-            elif "◀" in str(res.emoji) and num > 1:
+            elif '⬅' in (emoji := str(reaction.emoji)) and num > 1:
                 num -= 1
                 embed = await self.nh_embed(nh, num, max_page)
 
                 await msg.edit(embed=embed)
 
-            elif "▶" in str(res.emoji) and num < max_page:
+            elif '➡' in emoji and num < max_page:
                 num += 1
                 embed = await self.nh_embed(nh, num, max_page)
 
                 await msg.edit(embed=embed)
 
-            elif "⏪" in str(res.emoji) and num > 1:
+            elif '⏪' in emoji and num > 1:
                 num = 1
                 embed = await self.nh_embed(nh, num, max_page)
 
                 await msg.edit(embed=embed)
 
-            elif "⏩" in str(res.emoji) and num < max_page:
+            elif '⏩' in emoji and num < max_page:
                 num = max_page
                 embed = await self.nh_embed(nh, num, max_page)
 
                 await msg.edit(embed=embed)
 
-            elif "✅" in str(res.emoji):
+            elif '✅' in emoji:
                 self.__reading_nhentai.discard(guild_id)
                 return
         self.__reading_nhentai.discard(guild_id)
@@ -204,14 +203,13 @@ class Nsfw(commands.Cog):
     @commands.command(name='sauce', aliases=['soz'])
     @commands.cooldown(1, 30, commands.BucketType.guild)
     @commands.guild_only()
-    async def sauce(self, ctx, *, url=""):
+    async def sauce(self, ctx, *, url=''):
         '''Usage: 69sauce <url> OR attach an image'''
 
         if not await self.nsfw_check(ctx):
                     return
 
-        guild_id = str(ctx.guild.id)
-        if guild_id in self.__saucing:
+        if (guild_id := str(ctx.guild.id)) in self.__saucing:
             await ctx.send('This server is still saucing!')
             return
 
@@ -222,12 +220,12 @@ class Nsfw(commands.Cog):
                 if not url:
                     return await ctx.send('')
                 # Remove Discord URL Escape if exists
-                if url.startswith("<"):
-                    if url.endswith(">"):
+                if url.startswith('<'):
+                    if url.endswith('>'):
                         url = url[1:-1]
                     else:
                         url = url[1:]
-                if url.endswith(">"):
+                if url.endswith('>'):
                     url = url[:-1]
             else:
                 url = attachments[0].url
@@ -269,7 +267,7 @@ class Nsfw(commands.Cog):
                 return True
 
             try:
-                res, user = await self.bot.wait_for("reaction_add", timeout=30.69, check=check_react)
+                reaction, user = await self.bot.wait_for('reaction_add', timeout=30.69, check=check_react)
             except asyncio.TimeoutError:
                 self.__saucing.discard(guild_id)
                 return
@@ -277,19 +275,19 @@ class Nsfw(commands.Cog):
             if user != ctx.message.author:
                 pass
 
-            elif "⏪" in str(res.emoji) and num > 1:
+            elif '⬅' in (emoji := str(reaction.emoji)) and num > 1:
                 num -= 1
                 data = resdata[num - 1]
                 embed = await self.sauce_embed(data, num, max_page)
 
                 await msg.edit(embed=embed)
-            elif "⏩" in str(res.emoji) and num < max_page:
+            elif '➡' in emoji and num < max_page:
                 num += 1
                 data = resdata[num - 1]
                 embed = await self.sauce_embed(data, num, max_page)
 
                 await msg.edit(embed=embed)
-            elif "✅" in str(res.emoji):
+            elif '✅' in emoji:
                 self.__saucing.discard(guild_id)
                 return
         self.__saucing.discard(guild_id)
