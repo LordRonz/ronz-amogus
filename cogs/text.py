@@ -3,6 +3,7 @@ from utils.add_reaction import flushed
 from utils.yomomma import get_yomomma
 from utils.emojifier import get_emojified_text
 from random import choice
+from itertools import groupby
 import requests
 import discord
 
@@ -27,16 +28,15 @@ class Text(commands.Cog):
     async def sus(self, message):
         if message.author == self.bot.user or message.author.bot or not message.guild:
             return
-        if 'sus' in message.content.lower():
-            ratelimit = self.get_ratelimit(message)
-            if ratelimit:
+
+        if 'sus' in ''.join(c for c, _ in groupby(message.content.lower())):
+            if self.get_ratelimit(message):
                 return
             await flushed(message)
             await message.channel.send(self._AMOGUS)
             return
         if self.bot.user.mentioned_in(message):
-            ratelimit = self.get_ratelimit(message)
-            if ratelimit:
+            if self.get_ratelimit(message):
                 return
             await message.channel.send(f'**My prefix here is** {self.bot.command_prefix}')
 
