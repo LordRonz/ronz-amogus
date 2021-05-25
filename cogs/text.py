@@ -17,7 +17,7 @@ class Text(commands.Cog):
         with open(f'./profanities/profanities.txt', 'r') as f:
             self.profanities = f.readlines()
 
-        self.gooba_lyrics = requests.get('https://gist.githubusercontent.com/LordRonz/da8dcbf4cfdd07a19f239f5f6f555299/raw/1502daebb56ede76e09246d2a839f7a9e0192e05/gooba.txt').text
+        self.gooba_lyrics = requests.get('https://gist.githubusercontent.com/LordRonz/da8dcbf4cfdd07a19f239f5f6f555299/raw/1502daebb56ede76e09246d2a839f7a9e0192e05/gooba.txt').text.split('\n\n')
 
     def get_ratelimit(self, message):
         '''Returns the ratelimit left'''
@@ -56,7 +56,7 @@ class Text(commands.Cog):
         '''Gooba Lyrics'''
 
         await flushed(ctx.message)
-        lyrics = self.gooba_lyrics.split('\n\n')
+        lyrics = self.gooba_lyrics
         embed = discord.Embed(title='GOOBA', color=0xff0000, author='6ix9ine')
         embed.add_field(name='[Chorus]', value=lyrics[0], inline=False)
         embed.add_field(name='[Verse 1]', value=lyrics[1], inline=False)

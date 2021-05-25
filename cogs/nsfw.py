@@ -3,10 +3,7 @@ from utils.hentai_handler import random_hentai
 from utils.r34_handler import get_r34
 from utils.Hentai import Format
 from utils.add_reaction import flushed
-from utils.nekoslife_handler import (
-    get_hentai,
-    get_hentai_gif,
-)
+from utils.nekoslife import Nekoslife
 from utils.sauce_handler import get_sauce
 from utils.reddit_handler import get_agw, get_gw
 import discord
@@ -25,6 +22,7 @@ class Nsfw(commands.Cog):
         self.bot = bot
         self.__reading_nhentai = set()
         self.__saucing = set()
+        self.nekoslife = Nekoslife()
 
     async def nsfw_check(self, ctx):
         if ctx.channel and ctx.channel.is_nsfw():
@@ -151,7 +149,7 @@ class Nsfw(commands.Cog):
 
         async with ctx.typing():
             await flushed(ctx.message)
-            hentai_gif = await get_hentai_gif()
+            hentai_gif = await self.nekoslife.get('Random_hentai_gif')
             await ctx.send(hentai_gif)
     
     @commands.command(name='hentai')
@@ -165,7 +163,7 @@ class Nsfw(commands.Cog):
 
         async with ctx.typing():
             await flushed(ctx.message)
-            hentai = await get_hentai()
+            hentai = await self.nekoslife.get('hentai')
             await ctx.send(hentai)
 
     @commands.command(name='agw', aliases=['asiansgonewild'])

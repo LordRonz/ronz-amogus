@@ -7,7 +7,7 @@ from utils.xkcd import Xkcd
 class Memer(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.xkcd = Xkcd()
+        self.xkcd_comic = Xkcd()
 
     @commands.command(name='meme')
     @commands.cooldown(1, 6.9, commands.BucketType.guild)
@@ -34,7 +34,7 @@ class Memer(commands.Cog):
 
         async with ctx.typing():
             await flushed(ctx.message)
-            comic = await self.xkcd.get()
+            comic = await self.xkcd_comic.get()
             embed = discord.Embed(title=comic['title'], url=comic['url'], description=comic['desc'], color=0xff0000)
             embed.set_image(url=comic['img'])
             await ctx.send(embed=embed)
