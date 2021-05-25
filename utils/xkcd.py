@@ -6,12 +6,13 @@ class Xkcd(object):
     _URL = 'https://xkcd.com/'
     _TAIL = 'info.0.json'
     _LATEST = f'{_URL}{_TAIL}'
+    chrome = Faker().chrome
 
     def __init__(self):
         pass
 
     async def get(self):
-        user_agent = Faker().chrome(version_from=80, version_to=86, build_from=4100, build_to=4200)
+        user_agent = self.chrome(version_from=80, version_to=86, build_from=4100, build_to=4200)
         headers = {'User-Agent': user_agent}
         async with aiohttp.ClientSession() as session:
             async with session.get(self._LATEST, headers=headers) as res:
