@@ -127,7 +127,7 @@ class Nsfw(commands.Cog):
     @commands.command(name='r34', aliases=['rule34'])
     @commands.cooldown(1, 30, commands.BucketType.guild)
     @commands.guild_only()
-    async def rule34(self, ctx, id=None):
+    async def rule34(self, ctx):
         '''Fetch random pic from r/rule34'''
 
         if not await self.nsfw_check(ctx):
@@ -143,7 +143,7 @@ class Nsfw(commands.Cog):
     @commands.command(name='hentaigif')
     @commands.cooldown(1, 30, commands.BucketType.guild)
     @commands.guild_only()
-    async def hentaigif(self, ctx, id=None):
+    async def hentaigif(self, ctx):
         '''Fetch random hentai gif'''
 
         if not await self.nsfw_check(ctx):
@@ -157,7 +157,7 @@ class Nsfw(commands.Cog):
     @commands.command(name='hentai')
     @commands.cooldown(1, 30, commands.BucketType.guild)
     @commands.guild_only()
-    async def hentai(self, ctx, id=None):
+    async def hentai(self, ctx):
         '''Fetch random hentai'''
 
         if not await self.nsfw_check(ctx):
@@ -171,7 +171,7 @@ class Nsfw(commands.Cog):
     @commands.command(name='4k')
     @commands.cooldown(1, 30, commands.BucketType.guild)
     @commands.guild_only()
-    async def four_k(self, ctx, id=None):
+    async def four_k(self, ctx):
         '''Fetch random 4k pic ( ͡° ͜ʖ ͡°)'''
 
         if not await self.nsfw_check(ctx):
@@ -185,7 +185,7 @@ class Nsfw(commands.Cog):
     @commands.command(name='agw', aliases=['asiansgonewild'])
     @commands.cooldown(1, 30, commands.BucketType.guild)
     @commands.guild_only()
-    async def agw(self, ctx, id=None):
+    async def agw(self, ctx):
         '''Fetch random ( ͡° ͜ʖ ͡°) from r/asiansgonewild'''
 
         if not await self.nsfw_check(ctx):
@@ -201,7 +201,7 @@ class Nsfw(commands.Cog):
     @commands.command(name='gw', aliases=['gonewild'])
     @commands.cooldown(1, 30, commands.BucketType.guild)
     @commands.guild_only()
-    async def gw(self, ctx, id=None):
+    async def gw(self, ctx):
         '''Fetch random ( ͡° ͜ʖ ͡°) from r/gonewild'''
 
         if not await self.nsfw_check(ctx):

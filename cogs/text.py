@@ -4,6 +4,8 @@ from utils.yomomma import get_yomomma
 from utils.emojifier import get_emojified_text
 from random import choice
 from itertools import groupby
+from profanities.people import PEOPLE
+from profanities.profanities import PROFANITIES
 import requests
 import discord
 
@@ -12,10 +14,6 @@ class Text(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self._cd = commands.CooldownMapping.from_cooldown(1, 3, commands.BucketType.guild)
-
-
-        with open(f'./profanities/profanities.txt', 'r') as f:
-            self.profanities = f.readlines()
 
         self.gooba_lyrics = requests.get('https://gist.githubusercontent.com/LordRonz/da8dcbf4cfdd07a19f239f5f6f555299/raw/1502daebb56ede76e09246d2a839f7a9e0192e05/gooba.txt').text.split('\n\n')
 
@@ -47,7 +45,9 @@ class Text(commands.Cog):
         '''Profanity is a socially offensive use of language, which may also be called cursing, cussing or swearing, cuss words (American English vernacular), curse words, swear words, bad words, dirty words, or expletives.'''
 
         await flushed(ctx.message)
-        await ctx.send(choice(self.profanities))
+        embed = discord.Embed(color=0xff0000)
+        embed.description = f'{choice(PROFANITIES)}\n\n- {choice(PEOPLE)}'
+        await ctx.send(embed=embed)
 
     @commands.command(name='gooba')
     @commands.cooldown(1, 3, commands.BucketType.guild)
