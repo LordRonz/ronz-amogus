@@ -18,7 +18,7 @@ class ASCIIart(commands.Cog):
         with open(f'./random_txt/zukowei.txt', 'r') as f:
             self.zukowei = f.read()
 
-    @commands.command(name='amogus')
+    @commands.command(name='amogus', aliases=['amongus'])
     @commands.cooldown(1, 3, commands.BucketType.guild)
     @commands.guild_only()
     async def amogus(self, ctx):
@@ -27,7 +27,7 @@ class ASCIIart(commands.Cog):
         await flushed(ctx.message)
         await ctx.send(choice(self.amoguses))
 
-    @commands.command(name='cock')
+    @commands.command(name='cock', aliases=['dong', 'schlong', 'dick'])
     @commands.cooldown(1, 3, commands.BucketType.guild)
     @commands.guild_only()
     async def cock(self, ctx):

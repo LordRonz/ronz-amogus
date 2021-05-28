@@ -7,9 +7,10 @@ class MyHelpCommand(commands.DefaultHelpCommand):
         e = discord.Embed(
             title=f'{self.context.bot.user.display_name} Command List',
             color=0xff0000,
-            description=''
+            description='',
+            url='https://ronz-amogus.vercel.app/',
         )
-        source_code = '\n[Source Code](https://github.com/LordRonz/ronz-amogus)'
+        source_code = '\n[More Details](https://ronz-amogus.vercel.app/)'
         for page in self.paginator.pages:
             e.description = page
             e.description += source_code
