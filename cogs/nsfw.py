@@ -4,6 +4,7 @@ from utils.r34_handler import get_r34
 from utils.Hentai import Format
 from utils.add_reaction import flushed
 from utils.nekoslife import Nekoslife
+from utils.nekosfun import Nekosfun
 from utils.sauce_handler import get_sauce
 from utils.reddit_handler import get_agw, get_gw
 import discord
@@ -15,14 +16,15 @@ def truncate(x: str, n: int):
     return x[0 : n - 4] + '...'
 
 class Nsfw(commands.Cog):
-    NH_REACTMOJI = ('⏪', '⬅', '➡', '⏩', '✅')
-    SAUCE_REACTMOJI = ('⬅', '➡', '✅')
+    NH_REACTMOJI = ('⏪', '⬅️', '➡️', '⏩', '✅')
+    SAUCE_REACTMOJI = ('⬅️', '➡️', '✅')
 
     def __init__(self, bot):
         self.bot = bot
         self.__reading_nhentai = set()
         self.__saucing = set()
         self.nekoslife = Nekoslife()
+        self.nekosfun = Nekosfun()
 
     async def nsfw_check(self, ctx):
         if ctx.channel and ctx.channel.is_nsfw():
@@ -93,13 +95,13 @@ class Nsfw(commands.Cog):
             if user != ctx.message.author:
                 pass
 
-            elif '⬅' in (emoji := str(reaction.emoji)) and num > 1:
+            elif '⬅️' in (emoji := str(reaction.emoji)) and num > 1:
                 num -= 1
                 embed = await self.nh_embed(nh, num, max_page)
 
                 await msg.edit(embed=embed)
 
-            elif '➡' in emoji and num < max_page:
+            elif '➡️' in emoji and num < max_page:
                 num += 1
                 embed = await self.nh_embed(nh, num, max_page)
 
@@ -165,6 +167,20 @@ class Nsfw(commands.Cog):
             await flushed(ctx.message)
             hentai = await self.nekoslife.get('hentai')
             await ctx.send(hentai)
+
+    @commands.command(name='4k')
+    @commands.cooldown(1, 30, commands.BucketType.guild)
+    @commands.guild_only()
+    async def four_k(self, ctx, id=None):
+        '''Fetch random 4k pic ( ͡° ͜ʖ ͡°)'''
+
+        if not await self.nsfw_check(ctx):
+            return
+
+        async with ctx.typing():
+            await flushed(ctx.message)
+            _4k = await self.nekosfun.get('4k')
+            await ctx.send(_4k)
 
     @commands.command(name='agw', aliases=['asiansgonewild'])
     @commands.cooldown(1, 30, commands.BucketType.guild)
@@ -273,13 +289,13 @@ class Nsfw(commands.Cog):
             if user != ctx.message.author:
                 pass
 
-            elif '⬅' in (emoji := str(reaction.emoji)) and num > 1:
+            elif '⬅️' in (emoji := str(reaction.emoji)) and num > 1:
                 num -= 1
                 data = resdata[num - 1]
                 embed = await self.sauce_embed(data, num, max_page)
 
                 await msg.edit(embed=embed)
-            elif '➡' in emoji and num < max_page:
+            elif '➡️' in emoji and num < max_page:
                 num += 1
                 data = resdata[num - 1]
                 embed = await self.sauce_embed(data, num, max_page)
