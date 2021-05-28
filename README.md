@@ -7,6 +7,10 @@
 ![made by](https://img.shields.io/badge/made%20by-lordronz-red)
 ![OpenSource](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)
 
+## Documentation
+
+[Check this out](https://ronz-amogus.vercel.app/)
+
 ## Prefix
 
 69
