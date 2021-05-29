@@ -37,6 +37,7 @@ def main():
     ))
 
     CMD_PREFIX = '69'
+    DOCS_SITE = 'ronz-amogus.vercel.app'
 
     bot = commands.Bot(
             command_prefix=CMD_PREFIX,
@@ -53,8 +54,9 @@ def main():
     async def on_ready():
         print(f'\n\nLogged in as: {bot.user.name} - {bot.user.id}\nVersion: {discord.__version__}\n')
         print(f'Cogs loaded: \n{bot.cogs.keys()}')
-        garbage_collector.start()
+
         change_presence.start()
+        garbage_collector.start()
 
     @tasks.loop(hours=12)
     async def garbage_collector():
@@ -64,7 +66,7 @@ def main():
 
     @tasks.loop(minutes=30)
     async def change_presence():
-        await bot.change_presence(activity=discord.Game(f'{next(activities)} | {CMD_PREFIX}help'))
+        await bot.change_presence(activity=discord.Game(f'{next(activities)} | {CMD_PREFIX}help | {DOCS_SITE}'))
 
     for extension in extensions:
             bot.load_extension(extension)
