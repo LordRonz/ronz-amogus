@@ -48,6 +48,8 @@ def main():
 
     @bot.check
     async def no_pm(ctx):
+        if await ctx.bot.is_owner(ctx.author):
+            return True
         return not ctx.guild is None
 
     @bot.event
@@ -58,7 +60,7 @@ def main():
         change_presence.start()
         garbage_collector.start()
 
-    @tasks.loop(hours=12)
+    @tasks.loop(hours=6, minutes=9, seconds=69)
     async def garbage_collector():
         log.info('running garbage collection...')
         collected = gc.collect()
