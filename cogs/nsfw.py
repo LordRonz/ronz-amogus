@@ -305,7 +305,8 @@ class Nsfw(commands.Cog):
                 return
         self.__saucing.discard(guild_id)
 
-    async def sauce_embed(self, data: dict, num: int, max_page: int) -> discord.Embed:
+    @staticmethod
+    async def sauce_embed(data: dict, num: int, max_page: int) -> discord.Embed:
         embed = discord.Embed(title=truncate(data.title, 256), color=0xff0000)
         desc = ''
         if data.urls:
@@ -319,7 +320,8 @@ class Nsfw(commands.Cog):
         embed.set_footer(text=f'Similarity: {data.similarity}% | Powered by saucenao.com')
         return embed
 
-    async def nh_embed(self, nh, num: int, max_page: int) -> discord.Embed:
+    @staticmethod
+    async def nh_embed(nh, num: int, max_page: int) -> discord.Embed:
         embed = discord.Embed(title=truncate(nh.title(Format.Pretty), 256), url=nh.url, color=0xff0000)
         desc = f'\n> **Page {num}/{max_page}**\n'
         embed.description = desc

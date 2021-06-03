@@ -2,16 +2,7 @@ from discord.ext import commands
 import discord
 import gc
 from psutil import Process
-
-EXTENSIONS = {
-    'cogs.text',
-    'cogs.memer',
-    'cogs.ascii_art',
-    'cogs.nsfw',
-    'cogs.animal',
-    'cogs.voice',
-    'cogs.error_handler',
-}
+from extensions import EXTENSIONS
 
 class Owner(commands.Cog):
     def __init__(self, bot):
@@ -89,6 +80,10 @@ class Owner(commands.Cog):
 
         if not cog.startswith('cogs.'):
             cog = f'cogs.{cog}'
+
+        if cog == 'cogs.owner':
+            await ctx.send('**`NOT ALLOWED`**')
+            return
 
         if not cog in EXTENSIONS:
             await ctx.send('**`COG NOT FOUND`**')

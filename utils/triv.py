@@ -2,6 +2,7 @@ from typing import List
 import aiohttp
 from faker import Faker
 from random import shuffle
+from html import unescape
 
 _API = 'https://opentdb.com/api.php?amount=1&type=multiple'
 chrome = Faker().chrome
@@ -40,17 +41,21 @@ class Triv:
 async def get_trivia() -> Triv:
     user_agent = chrome(version_from=80, version_to=86, build_from=4100, build_to=4200)
     async with aiohttp.ClientSession() as session:
-        async with session.get('https://api.yomomma.info/', headers={'User-agent': user_agent}) as res:
+        async with session.get(_API, headers={'User-agent': user_agent}) as res:
             json = await res.json()
 
-    if json['respons_code'] != 0:
+    if json['response_code'] != 0:
         return None
     json = json['results'][0]
+
+    clean_q = unescape(json['question'])
+    clean_ans = unescape(json['correct_answer'])
+    clean_inc_ans = [unescape(s) for s in json['incorrect_answers']]
     return Triv(
         json['category'],
         json['type'],
         json['difficulty'],
-        json['question'],
-        json['correct_answer'],
-        json['incorrect_answers'],
+        clean_q,
+        clean_ans,
+        clean_inc_ans,
     )
