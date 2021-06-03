@@ -6,23 +6,13 @@ def main():
     from keep_alive import keep_alive
     from utils.custom_help import MyHelpCommand
     from itertools import cycle
+    from extensions import EXTENSIONS
     import logging
     import gc
 
     read_env()
 
     TOKEN = os.getenv('TOKEN')
-
-    extensions = (
-        'cogs.text',
-        'cogs.memer',
-        'cogs.ascii_art',
-        'cogs.nsfw',
-        'cogs.animal',
-        'cogs.voice',
-        'cogs.error_handler',
-        'cogs.owner',
-    )
 
     logging.basicConfig()
     log = logging.getLogger('ronz-AMOGUS')
@@ -70,7 +60,7 @@ def main():
     async def change_presence():
         await bot.change_presence(activity=discord.Game(f'{next(activities)} | {CMD_PREFIX}help | {DOCS_SITE}'))
 
-    for extension in extensions:
+    for extension in EXTENSIONS:
             bot.load_extension(extension)
 
     keep_alive()
