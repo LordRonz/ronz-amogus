@@ -85,8 +85,8 @@ class VideoSauce(BasicSauce):
 
 
 class SauceResponse:
-    _BOOK_INDEXES = [DB.HMagazines, DB.Madokami, DB.MangaDex]
-    _VIDEO_INDEXES = [DB.Anime, DB.HAnime, DB.Movies, DB.Shows]
+    _BOOK_INDEXES = (DB.HMagazines, DB.Madokami, DB.MangaDex)
+    _VIDEO_INDEXES = (DB.Anime, DB.HAnime, DB.Movies, DB.Shows)
 
     def __init__(self, resp):
         resp_header = resp['header']

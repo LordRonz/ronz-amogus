@@ -3,14 +3,15 @@ from utils.add_reaction import flushed
 from random import choice
 
 class ASCIIart(commands.Cog):
-    AMOGUS_COUNT = 7
-
     def __init__(self, bot):
         self.bot = bot
-        self.amoguses = []
-        for i in range(self.AMOGUS_COUNT):
+        temp_amoguses = []
+        AMOGUS_COUNT = 7
+        for i in range(AMOGUS_COUNT):
             with open(f'./amoguses/amogus{i}.txt', 'r') as f:
-                self.amoguses.append(f.read())
+                temp_amoguses.append(f.read())
+
+        self.amoguses = (*temp_amoguses,)
 
         with open(f'./random_txt/nice_cock.txt', 'r') as f:
             self.nice_cock = f.read()

@@ -4,7 +4,25 @@ from utils.redis_client import redis_client
 from datetime import timedelta
 import ujson as json
 
-class Reddit(object):
+class RedditObj:
+    __slots__ = (
+        'title',
+        'permalink',
+        'img',
+    )
+    def __init__(self, title: str, permalink: str, img: str):
+        self.title = title
+        self.permalink = permalink
+        self.img = img
+
+class Reddit:
+    __slots__ = (
+        'subreddit',
+        'sort',
+        'limit',
+        'time',
+        'url',
+    )
     _HOME = 'https://www.reddit.com/'
     def __init__(self, subreddit: str, sort: str='top', limit: int=69, time='day'):
         self.subreddit = subreddit
@@ -13,7 +31,7 @@ class Reddit(object):
         self.time = time
         self.url = f'{self._HOME}r/{self.subreddit}/top/.json?sort={self.sort}&t={self.time}&showmedia=true&mediaonly=true&is_self=true&limit={self.limit}'
 
-    async def get(self):
+    async def get(self) -> RedditObj:
         data = None
         cached = await redis_client.r.get(self.subreddit)
         if cached:
@@ -43,7 +61,7 @@ class Reddit(object):
         permalink = f"https://reddit.com{data[index]['data']['permalink']}"
 
         title = data[index]['data']['title']
-        return {'title': title, 'permalink': permalink, 'img': img_url}
+        return RedditObj(title, permalink, img_url)
 
     @staticmethod
     def isValidImg(url: str):
