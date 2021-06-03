@@ -17,3 +17,8 @@ async def get_gw():
     reddit = Reddit('gonewild', time='week')
 
     return await reddit.get()
+
+async def get_r34():
+    reddit = Reddit('rule34')
+
+    return await reddit.get()

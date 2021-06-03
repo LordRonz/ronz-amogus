@@ -1,12 +1,11 @@
 from discord.ext import commands
 from utils.hentai_handler import random_hentai
-from utils.r34_handler import get_r34
 from utils.Hentai import Format
 from utils.add_reaction import flushed
 from utils.nekoslife import Nekoslife
 from utils.nekosfun import Nekosfun
 from utils.sauce_handler import get_sauce
-from utils.reddit_handler import get_agw, get_gw
+from utils.reddit_handler import get_agw, get_gw, get_r34
 import discord
 import asyncio
 
@@ -136,8 +135,8 @@ class Nsfw(commands.Cog):
         async with ctx.typing():
             await flushed(ctx.message)
             r34 = await get_r34()
-            embed = discord.Embed(title=r34['title'], url=r34['permalink'], color=0xff0000)
-            embed.set_image(url=r34['img'])
+            embed = discord.Embed(title=r34.title, url=r34.permalink, color=0xff0000)
+            embed.set_image(url=r34.img)
             await ctx.send(embed=embed)
 
     @commands.command(name='hentaigif')

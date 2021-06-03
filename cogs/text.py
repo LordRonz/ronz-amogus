@@ -15,7 +15,7 @@ class Text(commands.Cog):
         self.bot = bot
         self._cd = commands.CooldownMapping.from_cooldown(1, 3, commands.BucketType.guild)
 
-        self.gooba_lyrics = requests.get('https://gist.githubusercontent.com/LordRonz/da8dcbf4cfdd07a19f239f5f6f555299/raw/1502daebb56ede76e09246d2a839f7a9e0192e05/gooba.txt').text.split('\n\n')
+        self.gooba_lyrics = (*requests.get('https://gist.githubusercontent.com/LordRonz/da8dcbf4cfdd07a19f239f5f6f555299/raw/1502daebb56ede76e09246d2a839f7a9e0192e05/gooba.txt').text.split('\n\n'),)
 
     def get_ratelimit(self, message):
         '''Returns the ratelimit left'''
@@ -33,6 +33,7 @@ class Text(commands.Cog):
             await flushed(message)
             await message.channel.send(self._AMOGUS)
             return
+
         if self.bot.user.mentioned_in(message):
             if self.get_ratelimit(message):
                 return
