@@ -52,6 +52,12 @@ class Owner(commands.Cog):
     async def ping(self, ctx):
         await ctx.send(f'Pong! {self.bot.latency * 1000} ms')
 
+    @commands.command(name='listemoji', aliases=['listemo'], hidden=True)
+    @commands.is_owner()
+    async def list_emo(self, ctx):
+        emos = '\n'.join(f'{e.name} {e.id}' for e in ctx.guild.emojis)
+        await ctx.send(emos)
+
     @commands.command(name='load', hidden=True)
     @commands.is_owner()
     async def load(self, ctx, *, cog: str):
