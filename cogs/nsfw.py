@@ -24,13 +24,15 @@ class Nsfw(commands.Cog):
         self.__saucing = set()
         self.nekoslife = Nekoslife()
         self.nekosfun = Nekosfun()
+        self.__nsfw_embed = discord.Embed(title='NSFW channel required!', description='Use NSFW commands in a NSFW marked channel (look in channel settings)', color=0xff0000)
+        self.__nsfw_embed.set_image(url='https://imgur.com/oe4iK5i.gif')
 
     async def nsfw_check(self, ctx):
         if ctx.channel and ctx.channel.is_nsfw():
             return True
 
         if ctx.channel:
-            await ctx.send('NSFW channel required!')
+            await ctx.send(embed=self.__nsfw_embed)
 
         return False
 
@@ -193,8 +195,8 @@ class Nsfw(commands.Cog):
         async with ctx.typing():
             await flushed(ctx.message)
             agw = await get_agw()
-            embed = discord.Embed(title=agw['title'], url=agw['permalink'], color=0xff0000)
-            embed.set_image(url=agw['img'])
+            embed = discord.Embed(title=agw.title, url=agw.permalink, color=0xff0000)
+            embed.set_image(url=agw.img)
             await ctx.send(embed=embed)
 
     @commands.command(name='gw', aliases=['gonewild'])
@@ -209,8 +211,8 @@ class Nsfw(commands.Cog):
         async with ctx.typing():
             await flushed(ctx.message)
             gw = await get_gw()
-            embed = discord.Embed(title=gw['title'], url=gw['permalink'], color=0xff0000)
-            embed.set_image(url=gw['img'])
+            embed = discord.Embed(title=gw.title, url=gw.permalink, color=0xff0000)
+            embed.set_image(url=gw.img)
             await ctx.send(embed=embed)
 
     @commands.command(name='sauce', aliases=['soz'])
