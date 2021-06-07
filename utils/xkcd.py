@@ -50,4 +50,4 @@ class Xkcd:
         rand = 404
         while rand == 404:
             rand = randint(1, latest)
-        return str(rand)
+        return rand

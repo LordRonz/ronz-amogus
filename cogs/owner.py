@@ -3,11 +3,14 @@ import discord
 import gc
 from psutil import Process
 from extensions import EXTENSIONS
+from datetime import timedelta
+from time import time
 
 class Owner(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.process = Process()
+        self.start_time = time()
 
     @commands.command(name='listguild', hidden=True)
     @commands.is_owner()
@@ -34,11 +37,19 @@ class Owner(commands.Cog):
     @commands.is_owner()
     async def stats(self, ctx):
         user_count = len(self.bot.users)
-        user = f'**{user_count} {"users" if user_count > 1 else "user"}**'
         guild_count = len(self.bot.guilds)
-        guild = f'**{guild_count} {"guilds" if guild_count > 1 else "guild"}**'
-        ram = f'**RAM Usage: {self.process.memory_info().vms / 1048576} MB**'
-        e = discord.Embed(title='Bot Stats', color=0xff0000, description=f'{user}\n{guild}\n{ram}')
+        cogs = '\n'.join(c for c in self.bot.cogs.keys())
+        ram = f'{self.process.memory_info().vms / 1048576} MB'
+        uptime = f'{timedelta(seconds=round(time() - self.start_time))}'
+
+        e = discord.Embed(title=self.bot.user.name, color=0xff0000, description=f'ID: `{self.bot.user.id}`')
+
+        e.add_field(name='Uptime', value=uptime)
+        e.add_field(name='RAM Usage', value=ram)
+        e.add_field(name='Guilds' if guild_count > 1 else 'Guild', value=f'{guild_count}')
+        e.add_field(name='Cached Users' if guild_count > 1 else ' Cached User', value=f'{user_count}')
+        e.add_field(name='Cogs', value=cogs)
+
         await ctx.send(embed=e)
 
     @commands.command(name='rungc', hidden=True)

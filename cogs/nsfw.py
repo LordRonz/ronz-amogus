@@ -45,7 +45,7 @@ class Nsfw(commands.Cog):
         if not await self.nsfw_check(ctx):
             return
 
-        if (guild_id := str(ctx.guild.id)) in self.__reading_nhentai:
+        if (guild_id := f'{ctx.guild.id}') in self.__reading_nhentai:
             await ctx.send('This server is still reading a doujin!')
             return
 
@@ -59,7 +59,7 @@ class Nsfw(commands.Cog):
                 await ctx.send('Hentai not found')
                 return
 
-        self.__reading_nhentai.add(str(ctx.guild.id))
+        self.__reading_nhentai.add(guild_id)
 
         max_page = len(nh.image_urls)
         first_run = True
@@ -222,9 +222,9 @@ class Nsfw(commands.Cog):
         '''Usage: 69sauce <url> OR attach an image'''
 
         if not await self.nsfw_check(ctx):
-                    return
+            return
 
-        if (guild_id := str(ctx.guild.id)) in self.__saucing:
+        if (guild_id := f'{ctx.guild.id}') in self.__saucing:
             await ctx.send('This server is still saucing!')
             return
 
