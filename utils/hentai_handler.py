@@ -1,7 +1,4 @@
-from utils.Hentai import Hentai, Utils, Format
-import aiohttp
-
-EXT = ('jpg', 'png', 'gif')
+from utils.Hentai import Hentai, Utils
 
 async def random_hentai(id: int=0):
     '''

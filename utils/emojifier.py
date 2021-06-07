@@ -1,3 +1,5 @@
+from string import ascii_lowercase
+
 SPECIALCODES = {
     '0': ':zero:',
     '1': ':one:',
@@ -17,9 +19,9 @@ SPECIALCODES = {
 }
 
 async def get_emojified_text(msg: str) -> str:
+    msg = ' '.join(msg.split())
+
     if len(msg) > 69:
         return 'Keep it under 69 characters fam'
 
-    msg = ' '.join(msg.split())
-
-    return ''.join(f':regional_indicator_{c}: ' if c.isalpha() else f'{SPECIALCODES[c]} ' if c in SPECIALCODES else '' for c in msg)
+    return ''.join(f':regional_indicator_{c}: ' if c in ascii_lowercase else f'{SPECIALCODES[c]} ' if c in SPECIALCODES else '' for c in msg.lower())

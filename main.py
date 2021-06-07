@@ -12,8 +12,6 @@ def main():
 
     read_env()
 
-    TOKEN = os.getenv('TOKEN')
-
     logging.basicConfig()
     log = logging.getLogger('ronz-AMOGUS')
     log.setLevel(logging.INFO)
@@ -64,7 +62,7 @@ def main():
             bot.load_extension(extension)
 
     keep_alive()
-    bot.run(TOKEN, bot=True, reconnect=True)
+    bot.run(os.getenv('TOKEN'), bot=True, reconnect=True)
 
 if __name__ == '__main__':
     main()

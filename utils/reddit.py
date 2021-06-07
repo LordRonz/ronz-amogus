@@ -49,14 +49,7 @@ class Reddit:
                         value=json.dumps(data),
                     )
 
-        length = len(data) - 1
-        index = 0
-
-        img_url = ''
-
-        while not Reddit.isValidImg(img_url):
-            index = randint(0, length)
-            img_url = data[index]['data']['url']
+        index, img_url = self.getImgUrl(data)
 
         permalink = f"https://reddit.com{data[index]['data']['permalink']}"
 
@@ -64,5 +57,11 @@ class Reddit:
         return RedditObj(title, permalink, img_url)
 
     @staticmethod
-    def isValidImg(url: str):
-        return url.startswith('https://i.') and (url.endswith('.jpg') or url.endswith('.gif') or url.endswith('.png') or url.endswith('.gifv'))
+    def getImgUrl(data: list):
+        url = ''
+        length = len(data) - 1
+        index = 0
+        while not (url.startswith('https://i.') and (url.endswith('.jpg') or url.endswith('.gif') or url.endswith('.png') or url.endswith('.gifv'))):
+            index = randint(0, length)
+            url = data[index]['data']['url']
+        return index, url

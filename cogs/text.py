@@ -11,7 +11,7 @@ import discord
 
 class Text(commands.Cog):
     _AMOGUS = '<a:amogusspin:850271577572245615> **A M O G U S** <a:amogusspin:850271577572245615>'
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
         self._cd = commands.CooldownMapping.from_cooldown(1, 3, commands.BucketType.guild)
 
@@ -39,7 +39,7 @@ class Text(commands.Cog):
             await message.channel.send(self._AMOGUS)
             return
 
-        if self.bot.user.mentioned_in(message):
+        if f'<@!{self.bot.user.id}>' in message.content or self.bot.user.mention in message.content:
             if self.get_ratelimit(message):
                 return
             await message.channel.send(f'**My prefix here is** {self.bot.command_prefix}')
