@@ -36,7 +36,7 @@ class Games(commands.Cog):
             await ctx.reply('You did not answer in time, what the fuck??')
             return
 
-        if len(ans:=msg.content.lower()) != 1 or not 0 <= (i:=ord(ans) - 97) < 5:
+        if len(ans:=msg.content.lower()) != 1 or not 0 <= (i:=ord(ans) - 97) < 4:
             await ctx.reply(f'no dumbass, the correct answer was `{triv.correct_answer}`')
             return
 

@@ -2,6 +2,7 @@ from discord.ext import commands
 from utils.add_reaction import flushed
 from utils.yomomma import get_yomomma
 from utils.emojifier import get_emojified_text
+from random_txt.gooba_ly import gooba_ly
 from random import choice
 from itertools import groupby
 from profanities.people import PEOPLE
@@ -15,7 +16,6 @@ class Text(commands.Cog):
         self.bot = bot
         self._cd = commands.CooldownMapping.from_cooldown(1, 3, commands.BucketType.guild)
 
-        gooba_ly = (*requests.get('https://gist.githubusercontent.com/LordRonz/da8dcbf4cfdd07a19f239f5f6f555299/raw/1502daebb56ede76e09246d2a839f7a9e0192e05/gooba.txt').text.split('\n\n'),)
         self.__gooba_embed = discord.Embed(title='GOOBA', color=0xff0000, author='6ix9ine')
         self.__gooba_embed.add_field(name='[Chorus]', value=gooba_ly[0], inline=False)
         self.__gooba_embed.add_field(name='[Verse 1]', value=gooba_ly[1], inline=False)
@@ -32,7 +32,7 @@ class Text(commands.Cog):
         if message.author == self.bot.user or message.author.bot or not message.guild:
             return
 
-        if 'sus' in ''.join(c for c, _ in groupby(message.content)).lower():
+        if 'sus' in ''.join(c for c, _ in groupby(message.content.lower())):
             if self.get_ratelimit(message):
                 return
             await flushed(message)
