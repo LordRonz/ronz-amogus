@@ -1,4 +1,4 @@
-from typing import Optional, BinaryIO
+from typing import Optional, BinaryIO, Dict, Union
 
 import requests
 import aiohttp
@@ -22,7 +22,7 @@ class SauceNao:
                 bgcolor:  int = BgColor.NONE,
                 ) -> None:
 
-        params = {}
+        params: Dict[str, Union[str, int]] = {}
 
         if api_key is not None:
             params['api_key'] = api_key

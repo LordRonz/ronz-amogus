@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from aiohttp.client_reqrep import ClientResponse
 from faker import Faker
 import aiohttp
 from urllib.parse import urljoin, urlparse
@@ -7,7 +8,7 @@ import asyncio
 from enum import Enum, unique
 from dataclasses import dataclass
 from pathlib import Path
-from typing import List, Tuple
+from typing import List, Tuple, Union
 from requests.models import Response
 
 @dataclass
@@ -65,6 +66,10 @@ class Format(Enum):
     Japanese = 'japanese'
     Pretty = 'pretty'
 
+@dataclass
+class HentaiResponse:
+    json: dict
+
 class RequestHandler(object):
     _timeout = (5, 5)
     _total = 5
@@ -77,19 +82,29 @@ class RequestHandler(object):
         self.total = total
     
     async def get(self, url: str, params: dict=None, **kwargs):
-        response = None
+        res = HentaiResponse(json={})
         async with aiohttp.ClientSession() as session:
             async with session.get(url, headers={ 'User-Agent' : RequestHandler._fake.chrome(version_from=80, version_to=86, build_from=4100, build_to=4200) }) as response:
                 if response.headers['content-type'] == 'application/json':
-                    response.json = await response.json()
+                    res.json = await response.json()
                 if response.status == 404:
                     return None
-        return response
+        return res
 
 class Hentai(object):
     HOME = 'https://nhentai.net/'
     _URL = urljoin(HOME, '/g/')
     _API = urljoin(HOME, '/api/gallery/')
+
+    def __init__(self):
+        self.timeout: Tuple[float, float]
+        self.total: int
+        self.__id: int
+        self.__handler: RequestHandler
+        self.__url: str
+        self.__api: str
+        self.__response: Union[Response, None]
+        self.__json: ClientResponse.json
 
     @classmethod
     async def init(cls, 
