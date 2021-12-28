@@ -17,21 +17,20 @@ def main():
     log.setLevel(logging.INFO)
 
     activities = cycle((
-        'ur mum',
-        'ur sis',
-        'ur aunt',
-        'ur stepsis',
-        'ur dad\'s wife',
+        'siksa kubur',
+        'preaching',
+        'praying',
     ))
 
-    CMD_PREFIX = '69'
-    DOCS_SITE = 'ronz-amogus.vercel.app'
+    CMD_PREFIX = ';'
+    DOCS_SITE = 'ronz-amogus.vercel.app/holy'
 
     bot = commands.Bot(
             command_prefix=CMD_PREFIX,
             description='SUS\nAMOGUS',
             case_insensitive=True,
             help_command=MyHelpCommand(),
+            strip_after_prefix=True,
         )
 
     @bot.check

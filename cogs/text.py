@@ -7,7 +7,6 @@ from random import choice
 from itertools import groupby
 from profanities.people import PEOPLE
 from profanities.profanities import PROFANITIES
-import requests
 import discord
 
 class Text(commands.Cog):

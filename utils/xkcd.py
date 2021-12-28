@@ -46,7 +46,7 @@ class Xkcd:
         return XkcdObj(base_url, title, img_url, desc)
 
     @staticmethod
-    def get_rand(latest: int) -> str:
+    def get_rand(latest: int) -> int:
         rand = 404
         while rand == 404:
             rand = randint(1, latest)

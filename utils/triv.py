@@ -3,6 +3,7 @@ import aiohttp
 from faker import Faker
 from random import shuffle
 from html import unescape
+from typing import Union
 
 _API = 'https://opentdb.com/api.php?amount=1&type=multiple'
 chrome = Faker().chrome
@@ -38,7 +39,7 @@ class Triv:
         self.answers = [correct_answer, *incorrect_answers]
         shuffle(self.answers)
 
-async def get_trivia() -> Triv:
+async def get_trivia() -> Union[Triv, None]:
     user_agent = chrome(version_from=80, version_to=86, build_from=4100, build_to=4200)
     async with aiohttp.ClientSession() as session:
         async with session.get(_API, headers={'User-agent': user_agent}) as res:
