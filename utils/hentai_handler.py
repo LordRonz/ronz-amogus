@@ -1,6 +1,7 @@
 from utils.Hentai import Hentai, Utils
+from typing import Union
 
-async def random_hentai(id: int=0):
+async def random_hentai(id: Union[int, None]=0):
     '''
     Fetch random hentai from nhentai
     '''

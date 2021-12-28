@@ -6,13 +6,17 @@ from utils.nekoslife import Nekoslife
 from utils.nekosfun import Nekosfun
 from utils.sauce_handler import get_sauce
 from utils.reddit_handler import get_agw, get_gw, get_r34
+from utils.saucenao.containers import BasicSauce
+from typing import Union
 import discord
 import asyncio
 
-def truncate(x: str, n: int):
+def truncate(x: Union[str, None], n: int):
+    if x is None:
+        return ''
     if len(x) < n:
         return x
-    return x[0 : n - 4] + '...'
+    return x[: n - 4] + '...'
 
 class Nsfw(commands.Cog):
     NH_REACTMOJI = ('⏪', '⬅️', '➡️', '⏩', '✅')
@@ -39,7 +43,7 @@ class Nsfw(commands.Cog):
     @commands.command(name='nhentai')
     @commands.cooldown(1, 30, commands.BucketType.guild)
     @commands.guild_only()
-    async def nhentai(self, ctx, id :str=''):
+    async def nhentai(self, ctx, id: Union[str, None]=''):
         '''Fetch random hentai from nhentai'''
 
         if not await self.nsfw_check(ctx):
@@ -308,7 +312,7 @@ class Nsfw(commands.Cog):
         self.__saucing.discard(guild_id)
 
     @staticmethod
-    async def sauce_embed(data: dict, num: int, max_page: int) -> discord.Embed:
+    async def sauce_embed(data: BasicSauce, num: int, max_page: int) -> discord.Embed:
         embed = discord.Embed(title=truncate(data.title, 256), color=0xff0000)
         desc = ''
         if data.urls:
