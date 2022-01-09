@@ -60,6 +60,10 @@ def main():
     for extension in EXTENSIONS:
             bot.load_extension(extension)
 
+    if os.getenv('CI'):
+        log.info('CI successfull! Terminating...')
+        return
+
     keep_alive()
     bot.run(os.getenv('TOKEN'), bot=True, reconnect=True)
 
